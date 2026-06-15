@@ -365,3 +365,136 @@
 
   color: #111827;
 }
+
+
+.project-info-card {
+  background: white;
+
+  border-radius: 20px;
+
+  padding: 25px;
+
+  margin-bottom: 25px;
+
+  box-shadow:
+    0 10px 30px rgba(0,0,0,.05);
+}
+
+.project-info-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(3,1fr);
+
+  gap: 25px;
+}
+
+.project-info-grid label {
+  display: block;
+
+  color: #888;
+
+  font-size: 13px;
+
+  margin-bottom: 6px;
+}
+
+.project-info-grid p {
+  margin: 0;
+
+  font-size: 16px;
+
+  font-weight: 600;
+
+  color: #111827;
+}
+
+.project-modal {
+  width: 550px;
+
+  background: white;
+
+  border-radius: 20px;
+
+  padding: 25px;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 15px;
+}
+
+.project-modal input {
+  padding: 14px;
+
+  border: 1px solid #ddd;
+
+  border-radius: 10px;
+
+  font-size: 14px;
+}
+
+.circle.active {
+  background: linear-gradient(
+    135deg,
+    #55b532,
+    #3f9721
+  );
+
+  color: white;
+
+  box-shadow:
+    0 8px 20px
+    rgba(85,181,50,.25);
+}
+
+
+.dispatch-info-card {
+  background: white;
+
+  border-radius: 20px;
+
+  padding: 25px;
+
+  margin-bottom: 25px;
+
+  box-shadow:
+    0 10px 30px rgba(0,0,0,.05);
+}
+
+.dispatch-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(3,1fr);
+
+  gap: 25px;
+}
+
+.dispatch-grid label {
+  display: block;
+
+  color: #888;
+
+  font-size: 13px;
+
+  margin-bottom: 6px;
+}
+
+.dispatch-grid p {
+  margin: 0;
+
+  font-size: 16px;
+
+  font-weight: 600;
+
+  color: #111827;
+}
+
+@media (max-width: 768px) {
+
+  .project-info-grid {
+    grid-template-columns: 1fr;
+  }
+
+}
