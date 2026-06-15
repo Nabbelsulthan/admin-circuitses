@@ -1,0 +1,68 @@
+.updates-page {
+  padding: 30px;
+}
+
+.updates-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+}
+
+.add-update-btn {
+  border: none;
+  background: #55b532;
+  color: white;
+
+  padding: 12px 20px;
+  border-radius: 10px;
+
+  cursor: pointer;
+}
+
+.updates-table-card {
+  background: white;
+  border-radius: 18px;
+  overflow: hidden;
+
+  box-shadow: 0 10px 25px rgba(0,0,0,.05);
+}
+
+.updates-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.updates-table th,
+.updates-table td {
+  padding: 18px;
+  text-align: left;
+}
+
+.updates-table th {
+  background: #f7f7f7;
+}
+
+.updates-table tr {
+  border-top: 1px solid #eee;
+}
+
+.update-modal {
+  width: 500px;
+
+  background: white;
+  padding: 25px;
+
+  border-radius: 16px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.update-modal input {
+  padding: 12px;
+
+  border: 1px solid #ddd;
+  border-radius: 10px;
+}

@@ -1,0 +1,36 @@
+body {
+  margin: 0;
+  background: #f5f7fb;
+  font-family: sans-serif;
+}
+
+.admin-layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+
+
+.admin-content {
+  flex: 1;
+  padding: 30px;
+}
+
+.dashboard-cards {
+  display: grid;
+  grid-template-columns: repeat(4,1fr);
+  gap: 20px;
+}
+
+.dashboard-card {
+  background: white;
+  padding: 25px;
+  border-radius: 16px;
+  box-shadow: 0 10px 20px rgba(0,0,0,.05);
+}
+
+.dashboard-card p {
+  font-size: 32px;
+  font-weight: 700;
+  color: #55b532;
+}

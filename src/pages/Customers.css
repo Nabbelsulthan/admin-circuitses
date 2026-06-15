@@ -1,0 +1,61 @@
+.customers-page {
+  padding: 30px;
+}
+
+.customers-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+}
+
+.add-customer-btn {
+  background: #55b532;
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.customers-table-card {
+  background: white;
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 10px 25px rgba(0,0,0,.05);
+}
+
+.customers-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.customers-table th,
+.customers-table td {
+  padding: 18px;
+  text-align: left;
+}
+
+.customers-table th {
+  background: #f7f7f7;
+}
+
+.customers-table tr {
+  border-top: 1px solid #eee;
+}
+
+.customer-modal {
+  width: 500px;
+  background: white;
+  padding: 25px;
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.customer-modal input {
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+}

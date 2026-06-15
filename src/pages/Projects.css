@@ -1,0 +1,131 @@
+.projects-page {
+  padding: 30px;
+}
+
+.projects-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+}
+
+.projects-header h1 {
+  margin: 0;
+}
+
+.projects-header p {
+  color: #666;
+}
+
+.add-project-btn {
+  border: none;
+  background: #55b532;
+  color: white;
+
+  padding: 12px 20px;
+
+  border-radius: 10px;
+
+  cursor: pointer;
+
+  font-weight: 600;
+}
+
+.projects-table-card {
+  background: white;
+  border-radius: 18px;
+  overflow: hidden;
+
+  box-shadow: 0 10px 25px rgba(0,0,0,.05);
+}
+
+.projects-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.projects-table th {
+  background: #f7f7f7;
+  text-align: left;
+  padding: 18px;
+}
+
+.projects-table td {
+  padding: 18px;
+  border-top: 1px solid #eee;
+}
+
+.view-btn {
+  border: none;
+  background: #111827;
+  color: white;
+
+  padding: 8px 14px;
+
+  border-radius: 8px;
+
+  cursor: pointer;
+}
+
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+
+  background: rgba(0,0,0,.4);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.project-modal {
+  width: 500px;
+
+  background: white;
+
+  padding: 25px;
+
+  border-radius: 16px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.project-modal input {
+  padding: 12px;
+
+  border: 1px solid #ddd;
+
+  border-radius: 10px;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.cancel-btn {
+  border: none;
+
+  padding: 12px 18px;
+
+  border-radius: 8px;
+
+  cursor: pointer;
+}
+
+.save-btn {
+  border: none;
+
+  background: #55b532;
+  color: white;
+
+  padding: 12px 18px;
+
+  border-radius: 8px;
+
+  cursor: pointer;
+}

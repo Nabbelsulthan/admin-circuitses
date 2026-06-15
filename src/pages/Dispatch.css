@@ -1,0 +1,64 @@
+.dispatch-page {
+  padding: 30px;
+}
+
+.dispatch-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+}
+
+.add-dispatch-btn {
+  border: none;
+  background: #55b532;
+  color: white;
+
+  padding: 12px 20px;
+
+  border-radius: 10px;
+
+  cursor: pointer;
+}
+
+.dispatch-table-card {
+  background: white;
+
+  border-radius: 18px;
+
+  overflow: hidden;
+
+  box-shadow: 0 10px 25px rgba(0,0,0,.05);
+}
+
+.dispatch-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.dispatch-table th,
+.dispatch-table td {
+  padding: 18px;
+  text-align: left;
+}
+
+.dispatch-table th {
+  background: #f7f7f7;
+}
+
+.dispatch-table tr {
+  border-top: 1px solid #eee;
+}
+
+.edit-btn {
+  border: none;
+
+  background: #111827;
+  color: white;
+
+  padding: 8px 14px;
+
+  border-radius: 8px;
+
+  cursor: pointer;
+}

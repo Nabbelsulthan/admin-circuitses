@@ -1,0 +1,54 @@
+.documents-page {
+  padding: 30px;
+}
+
+.documents-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+}
+
+.upload-btn {
+  border: none;
+  background: #55b532;
+  color: white;
+  padding: 12px 20px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.documents-table-card {
+  background: white;
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 10px 25px rgba(0,0,0,.05);
+}
+
+.documents-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.documents-table th,
+.documents-table td {
+  padding: 18px;
+  text-align: left;
+}
+
+.documents-table th {
+  background: #f7f7f7;
+}
+
+.documents-table tr {
+  border-top: 1px solid #eee;
+}
+
+.download-btn {
+  border: none;
+  background: #111827;
+  color: white;
+  padding: 8px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+}

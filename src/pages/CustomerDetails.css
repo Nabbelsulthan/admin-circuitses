@@ -1,0 +1,41 @@
+.customer-details {
+  padding: 30px;
+}
+
+.customer-header {
+  margin-bottom: 25px;
+}
+
+.customer-header h1 {
+  margin: 0;
+}
+
+.customer-header p {
+  color: #666;
+}
+
+.detail-card {
+  background: white;
+
+  border-radius: 18px;
+
+  padding: 25px;
+
+  box-shadow:
+    0 10px 25px rgba(0,0,0,.05);
+}
+
+.detail-card p {
+  margin-bottom: 12px;
+}
+
+.details-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(2,1fr);
+
+  gap: 20px;
+
+  margin-bottom: 20px;
+}

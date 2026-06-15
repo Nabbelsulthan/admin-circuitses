@@ -1,24 +1,73 @@
-import logo from './logo.svg';
-import './App.css';
+
+
+
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+} from "react-router-dom";
+
+import Login from "./pages/Login";
+import Dashboard from "./pages/Dashboard";
+import Projects from "./pages/Projects";
+import AdminLayout from "./layouts/AdminLayout";
+import ProjectDetails from "./pages/ProjectDetails";
+import Customers from "./pages/Customers";
+import Documents from "./pages/Documents";
+import Dispatch from "./pages/Dispatch";
+import Updates from "./pages/Updates";
+import CustomerDetails from "./pages/CustomerDetails";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <BrowserRouter>
+      <Routes>
+
+        <Route path="/" element={<Login />} />
+
+        <Route element={<AdminLayout />}>
+
+          <Route
+            path="/dashboard"
+            element={<Dashboard />}
+          />
+
+          <Route
+            path="/projects"
+            element={<Projects />}
+          />
+
+          <Route
+            path="/projects/:id"
+            element={<ProjectDetails />}
+          />
+          <Route
+            path="/customers"
+            element={<Customers />}
+          />
+          <Route
+            path="/documents"
+            element={<Documents />}
+          />
+
+          <Route
+            path="/dispatch"
+            element={<Dispatch />}
+          />
+          <Route
+            path="/updates"
+            element={<Updates />}
+          />
+
+          <Route
+            path="/customers/:id"
+            element={<CustomerDetails />}
+          />
+
+        </Route>
+
+      </Routes>
+    </BrowserRouter>
   );
 }
 
