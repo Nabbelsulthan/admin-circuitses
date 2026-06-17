@@ -4,8 +4,8 @@ import DashboardIcon from "@mui/icons-material/Dashboard";
 import FolderIcon from "@mui/icons-material/Folder";
 import PeopleIcon from "@mui/icons-material/People";
 // import DescriptionIcon from "@mui/icons-material/Description";
-import LocalShippingIcon from "@mui/icons-material/LocalShipping";
-import NotificationsIcon from "@mui/icons-material/Notifications";
+// import LocalShippingIcon from "@mui/icons-material/LocalShipping";
+// import NotificationsIcon from "@mui/icons-material/Notifications";
 
 
 export default function Sidebar() {
@@ -52,21 +52,21 @@ export default function Sidebar() {
           <span>Documents</span>
         </div> */}
 
-        <div
+        {/* <div
           className="menu-item"
           onClick={() => navigate("/dispatch")}
         >
           <LocalShippingIcon />
           <span>Dispatch</span>
-        </div>
+        </div> */}
 
-        <div
+        {/* <div
           className="menu-item"
           onClick={() => navigate("/updates")}
         >
           <NotificationsIcon />
           <span>Updates</span>
-        </div>
+        </div> */}
 
       </div>
     </div>

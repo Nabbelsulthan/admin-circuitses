@@ -39,13 +39,36 @@ export default function ProjectDetails() {
         useState(null);
 
 
-    const updates = [
-        "Wiring Completed",
-        "FAT Scheduled",
-    ];
+    const [updates, setUpdates] =
+        useState([]);
+
+    const [newUpdate, setNewUpdate] =
+        useState("");
+
+    const [showDispatchModal, setShowDispatchModal] =
+        useState(false);
+
+    const [dispatchData, setDispatchData] =
+        useState({
+            dispatch_status: "",
+            transporter: "",
+            lr_number: "",
+            vehicle_number: "",
+            dispatch_date: "",
+            delivery_date: "",
+        });
 
 
 
+
+    const [editProject, setEditProject] =
+        useState({
+            project_name: "",
+            po_number: "",
+            project_value: "",
+            start_date: "",
+            expected_delivery: "",
+        });
 
     const handleUpdateStage = async () => {
         try {
@@ -84,6 +107,26 @@ export default function ProjectDetails() {
             .then((res) => res.json())
             .then((data) => {
                 setProject(data);
+
+                setDispatchData({
+                    dispatch_status:
+                        data.dispatch_status || "",
+
+                    transporter:
+                        data.transporter || "",
+
+                    lr_number:
+                        data.lr_number || "",
+
+                    vehicle_number:
+                        data.vehicle_number || "",
+
+                    dispatch_date:
+                        data.dispatch_date || "",
+
+                    delivery_date:
+                        data.delivery_date || "",
+                });
             })
             .catch((err) => {
                 console.error(err);
@@ -97,6 +140,14 @@ export default function ProjectDetails() {
                 setDocuments(data);
             });
 
+
+        fetch(
+            `http://localhost:5001/api/updates/${id}`
+        )
+            .then((res) => res.json())
+            .then((data) => {
+                setUpdates(data);
+            });
 
     }, [id]);
 
@@ -232,6 +283,181 @@ export default function ProjectDetails() {
 
 
 
+    const handleAddUpdate =
+        async () => {
+
+            if (!newUpdate.trim())
+                return;
+
+            try {
+
+                await fetch(
+                    "http://localhost:5001/api/updates",
+                    {
+                        method: "POST",
+                        headers: {
+                            "Content-Type":
+                                "application/json",
+                        },
+                        body: JSON.stringify({
+                            project_id: id,
+                            update_text: newUpdate,
+                        }),
+                    }
+                );
+
+                const response =
+                    await fetch(
+                        `http://localhost:5001/api/updates/${id}`
+                    );
+
+                const data =
+                    await response.json();
+
+                setUpdates(data);
+
+                setNewUpdate("");
+
+            } catch (error) {
+
+                console.error(error);
+
+            }
+
+        };
+
+
+    const handleDeleteUpdate =
+        async (updateId) => {
+
+            try {
+
+                await fetch(
+                    `http://localhost:5001/api/updates/${updateId}`,
+                    {
+                        method: "DELETE",
+                    }
+                );
+
+                const response =
+                    await fetch(
+                        `http://localhost:5001/api/updates/${id}`
+                    );
+
+                const data =
+                    await response.json();
+
+                setUpdates(data);
+
+            } catch (error) {
+
+                console.error(error);
+
+            }
+
+        };
+
+    const handleSaveDispatch =
+        async () => {
+
+            try {
+
+                await fetch(
+                    `http://localhost:5001/api/projects/${id}`,
+                    {
+                        method: "PUT",
+
+                        headers: {
+                            "Content-Type":
+                                "application/json",
+                        },
+
+                        body: JSON.stringify({
+                            status:
+                                project.status,
+
+                            ...dispatchData,
+                        }),
+                    }
+                );
+
+                const response =
+                    await fetch(
+                        `http://localhost:5001/api/projects/${id}`
+                    );
+
+                const updatedProject =
+                    await response.json();
+
+                setProject(
+                    updatedProject
+                );
+
+                setShowDispatchModal(
+                    false
+                );
+
+                alert(
+                    "Dispatch Updated"
+                );
+
+            } catch (error) {
+
+                console.error(error);
+
+            }
+
+        };
+
+
+
+    const handleSaveProject =
+        async () => {
+
+            try {
+
+                const response =
+                    await fetch(
+                        `http://localhost:5001/api/projects/${id}`,
+                        {
+                            method: "PUT",
+
+                            headers: {
+                                "Content-Type":
+                                    "application/json",
+                            },
+
+                            body: JSON.stringify({
+                                ...project,
+                                ...editProject,
+                            }),
+                        }
+                    );
+                await response.json();
+
+                const refreshedResponse =
+                    await fetch(
+                        `http://localhost:5001/api/projects/${id}`
+                    );
+
+                const refreshedProject =
+                    await refreshedResponse.json();
+
+                setProject(refreshedProject);
+
+                setShowProjectModal(false);
+
+                alert(
+                    "Project Updated"
+                );
+
+            } catch (error) {
+
+                console.error(error);
+
+            }
+
+        };
 
     return (
         <div className="project-details">
@@ -248,12 +474,36 @@ export default function ProjectDetails() {
 
                 <div className="card-header">
                     <h2>Project Information</h2>
-
                     <button
                         className="mini-btn"
-                        onClick={() =>
-                            setShowProjectModal(true)
-                        }
+                        onClick={() => {
+
+                            setEditProject({
+                                project_name:
+                                    project.project_name || "",
+
+                                po_number:
+                                    project.po_number || "",
+
+                                project_value:
+                                    project.project_value || "",
+
+                                start_date:
+                                    project.start_date
+                                        ? project.start_date
+                                            .split("T")[0]
+                                        : "",
+
+                                expected_delivery:
+                                    project.expected_delivery
+                                        ? project.expected_delivery
+                                            .split("T")[0]
+                                        : "",
+                            });
+
+                            setShowProjectModal(true);
+
+                        }}
                     >
                         Edit Project
                     </button>
@@ -283,12 +533,26 @@ export default function ProjectDetails() {
 
                     <div>
                         <label>Start Date</label>
-                        <p>15 Jun 2026</p>
+
+                        <p>
+                            {project.start_date
+                                ? new Date(
+                                    project.start_date
+                                ).toLocaleDateString("en-IN")
+                                : "-"}
+                        </p>
+
                     </div>
 
                     <div>
                         <label>Expected Delivery</label>
-                        <p>30 Jul 2026</p>
+                        <p>
+                            {project.expected_delivery
+                                ? new Date(
+                                    project.expected_delivery
+                                ).toLocaleDateString("en-IN")
+                                : "-"}
+                        </p>
                     </div>
 
                 </div>
@@ -331,7 +595,7 @@ export default function ProjectDetails() {
 
                 </div>
 
-                <div className="detail-card">
+                {/* <div className="detail-card">
                     <h3>Dispatch Status</h3>
 
                     <select className="status-select"
@@ -348,7 +612,7 @@ export default function ProjectDetails() {
                         Update Dispatch
                     </button>
 
-                </div>
+                </div> */}
 
             </div>
 
@@ -414,7 +678,12 @@ export default function ProjectDetails() {
                 <div className="card-header">
                     <h2>Dispatch Information</h2>
 
-                    <button className="mini-btn">
+                    <button
+                        className="mini-btn"
+                        onClick={() =>
+                            setShowDispatchModal(true)
+                        }
+                    >
                         Edit Dispatch
                     </button>
                 </div>
@@ -423,32 +692,44 @@ export default function ProjectDetails() {
 
                     <div>
                         <label>Status</label>
-                        <p>Packing Completed</p>
+                        <p>
+                            {project.dispatch_status || "-"}
+                        </p>
                     </div>
 
                     <div>
                         <label>Transporter</label>
-                        <p>ABC Logistics</p>
+                        <p>
+                            {project.transporter || "-"}
+                        </p>
                     </div>
 
                     <div>
                         <label>LR Number</label>
-                        <p>LR123456</p>
+                        <p>
+                            {project.lr_number || "-"}
+                        </p>
                     </div>
 
                     <div>
                         <label>Vehicle Number</label>
-                        <p>TN 39 AB 1234</p>
+                        <p>
+                            {project.vehicle_number || "-"}
+                        </p>
                     </div>
 
                     <div>
                         <label>Dispatch Date</label>
-                        <p>15 Jun 2026</p>
+                        <p>
+                            {project.dispatch_date || "-"}
+                        </p>
                     </div>
 
                     <div>
                         <label>Expected Delivery</label>
-                        <p>18 Jun 2026</p>
+                        <p>
+                            {project.delivery_date || "-"}
+                        </p>
                     </div>
 
                 </div>
@@ -537,22 +818,71 @@ export default function ProjectDetails() {
                 </div>
 
                 <div className="detail-card">
+
                     <div className="card-header">
                         <h3>Recent Updates</h3>
+                    </div>
 
-                        <button className="mini-btn">
-                            + Add Update
+                    <div className="update-input">
+
+                        <input
+                            type="text"
+                            placeholder="Add Update..."
+                            value={newUpdate}
+                            onChange={(e) =>
+                                setNewUpdate(
+                                    e.target.value
+                                )
+                            }
+                        />
+
+                        <button
+                            className="mini-btn"
+                            onClick={
+                                handleAddUpdate
+                            }
+                        >
+                            Add
                         </button>
+
                     </div>
 
                     {updates.map((update) => (
+
                         <div
-                            key={update}
-                            className="list-item"
+                            key={update.id}
+                            className="update-item"
                         >
-                            {update}
+
+                            <div>
+
+                                <p>
+                                    {update.update_text}
+                                </p>
+
+                                <small>
+                                    {new Date(
+                                        update.created_at
+                                    ).toLocaleDateString()}
+                                </small>
+
+                            </div>
+
+                            <button
+                                className="delete-doc-btn"
+                                onClick={() =>
+                                    handleDeleteUpdate(
+                                        update.id
+                                    )
+                                }
+                            >
+                                Delete
+                            </button>
+
                         </div>
+
                     ))}
+
                 </div>
 
             </div>
@@ -610,34 +940,72 @@ export default function ProjectDetails() {
 
                         <input
                             type="text"
-                            defaultValue="MCC Panel"
-                            placeholder="Project Name"
+                            value={
+                                editProject.project_name
+                            }
+                            onChange={(e) =>
+                                setEditProject({
+                                    ...editProject,
+                                    project_name:
+                                        e.target.value,
+                                })
+                            }
                         />
+
+
 
                         <input
                             type="text"
-                            defaultValue="ABC Industries"
-                            placeholder="Customer"
+                            value={
+                                editProject.po_number
+                            }
+                            onChange={(e) =>
+                                setEditProject({
+                                    ...editProject,
+                                    po_number:
+                                        e.target.value,
+                                })
+                            }
                         />
-
                         <input
                             type="text"
-                            defaultValue="CES-2026-001"
-                            placeholder="PO Number"
+                            value={
+                                editProject.project_value
+                            }
+                            onChange={(e) =>
+                                setEditProject({
+                                    ...editProject,
+                                    project_value:
+                                        e.target.value,
+                                })
+                            }
                         />
-
                         <input
-                            type="text"
-                            defaultValue="₹ 8,50,000"
-                            placeholder="Project Value"
+                            type="date"
+                            value={
+                                editProject.start_date
+                            }
+                            onChange={(e) =>
+                                setEditProject({
+                                    ...editProject,
+                                    start_date:
+                                        e.target.value,
+                                })
+                            }
                         />
 
                         <input
                             type="date"
-                        />
-
-                        <input
-                            type="date"
+                            value={
+                                editProject.expected_delivery
+                            }
+                            onChange={(e) =>
+                                setEditProject({
+                                    ...editProject,
+                                    expected_delivery:
+                                        e.target.value,
+                                })
+                            }
                         />
 
                         <div className="modal-actions">
@@ -650,8 +1018,12 @@ export default function ProjectDetails() {
                             >
                                 Cancel
                             </button>
-
-                            <button className="save-btn">
+                            <button
+                                className="save-btn"
+                                onClick={
+                                    handleSaveProject
+                                }
+                            >
                                 Save Project
                             </button>
 
@@ -659,6 +1031,159 @@ export default function ProjectDetails() {
 
                     </div>
                 </div>
+            )}
+
+
+
+            {showDispatchModal && (
+
+                <div className="modal-overlay">
+
+                    <div className="project-modal">
+
+                        <h2>
+                            Edit Dispatch
+                        </h2>
+
+                        <select
+                            value={
+                                dispatchData.dispatch_status
+                            }
+                            onChange={(e) =>
+                                setDispatchData({
+                                    ...dispatchData,
+                                    dispatch_status:
+                                        e.target.value,
+                                })
+                            }
+                        >
+                            <option>
+                                Pending
+                            </option>
+
+                            <option>
+                                Packing Started
+                            </option>
+
+                            <option>
+                                Packing Completed
+                            </option>
+
+                            <option>
+                                Ready For Dispatch
+                            </option>
+
+                            <option>
+                                Dispatched
+                            </option>
+
+                            <option>
+                                Delivered
+                            </option>
+
+                        </select>
+
+                        <input
+                            type="text"
+                            placeholder="Transporter"
+                            value={
+                                dispatchData.transporter
+                            }
+                            onChange={(e) =>
+                                setDispatchData({
+                                    ...dispatchData,
+                                    transporter:
+                                        e.target.value,
+                                })
+                            }
+                        />
+
+                        <input
+                            type="text"
+                            placeholder="LR Number"
+                            value={
+                                dispatchData.lr_number
+                            }
+                            onChange={(e) =>
+                                setDispatchData({
+                                    ...dispatchData,
+                                    lr_number:
+                                        e.target.value,
+                                })
+                            }
+                        />
+
+                        <input
+                            type="text"
+                            placeholder="Vehicle Number"
+                            value={
+                                dispatchData.vehicle_number
+                            }
+                            onChange={(e) =>
+                                setDispatchData({
+                                    ...dispatchData,
+                                    vehicle_number:
+                                        e.target.value,
+                                })
+                            }
+                        />
+
+                        <input
+                            type="date"
+                            value={
+                                dispatchData.dispatch_date
+                            }
+                            onChange={(e) =>
+                                setDispatchData({
+                                    ...dispatchData,
+                                    dispatch_date:
+                                        e.target.value,
+                                })
+                            }
+                        />
+
+                        <input
+                            type="date"
+                            value={
+                                dispatchData.delivery_date
+                            }
+                            onChange={(e) =>
+                                setDispatchData({
+                                    ...dispatchData,
+                                    delivery_date:
+                                        e.target.value,
+                                })
+                            }
+                        />
+
+                        <div className="modal-actions">
+
+                            <button
+                                className="cancel-btn"
+                                onClick={() =>
+                                    setShowDispatchModal(
+                                        false
+                                    )
+                                }
+                            >
+                                Cancel
+                            </button>
+
+                            <button
+                                className="save-btn"
+                                onClick={
+                                    handleSaveDispatch
+                                }
+                            >
+                                Save
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
             )}
 
         </div>
