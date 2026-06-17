@@ -1,31 +1,14 @@
 
 
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "./Customers.css";
 import { useNavigate } from "react-router-dom";
 
 export default function Customers() {
 
   const navigate = useNavigate();
-  const [customers, setCustomers] = useState([
-    {
-      id: 1,
-      company: "ABC Industries",
-      contact: "Arun Kumar",
-      email: "abc@gmail.com",
-      phone: "9876543210",
-      username: "abcindustries",
-    },
-    {
-      id: 2,
-      company: "XYZ Pvt Ltd",
-      contact: "Rahul",
-      email: "xyz@gmail.com",
-      phone: "9876543211",
-      username: "xyzadmin",
-    },
-  ]);
+  const [customers, setCustomers] = useState([]);
 
   const [showModal, setShowModal] = useState(false);
 
@@ -38,40 +21,57 @@ export default function Customers() {
     password: "",
   });
 
-  const handleAddCustomer = () => {
-    if (
-      !newCustomer.company ||
-      !newCustomer.contact ||
-      !newCustomer.username ||
-      !newCustomer.password
-    ) {
-      alert("Please fill all required fields");
-      return;
+  const handleAddCustomer = async () => {
+    try {
+
+      const response = await fetch(
+        "http://localhost:5001/api/customers",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type":
+              "application/json",
+          },
+          body: JSON.stringify(
+            newCustomer
+          ),
+        }
+      );
+
+      const savedCustomer =
+        await response.json();
+
+      setCustomers([
+        ...customers,
+        savedCustomer,
+      ]);
+
+      setNewCustomer({
+        company_name: "",
+        contact_person: "",
+        email: "",
+        phone: "",
+        username: "",
+        password: "",
+      });
+
+      setShowModal(false);
+
+    } catch (error) {
+      console.error(error);
     }
-
-    setCustomers([
-      ...customers,
-      {
-        id: Date.now(),
-        company: newCustomer.company,
-        contact: newCustomer.contact,
-        email: newCustomer.email,
-        phone: newCustomer.phone,
-        username: newCustomer.username,
-      },
-    ]);
-
-    setNewCustomer({
-      company: "",
-      contact: "",
-      email: "",
-      phone: "",
-      username: "",
-      password: "",
-    });
-
-    setShowModal(false);
   };
+
+  useEffect(() => {
+    fetch(
+      "http://localhost:5001/api/customers"
+    )
+      .then((res) => res.json())
+      .then((data) => {
+        setCustomers(data);
+      })
+      .catch(console.error);
+  }, []);
 
   return (
     <div className="customers-page">
@@ -105,8 +105,8 @@ export default function Customers() {
           <tbody>
             {customers.map((customer) => (
               <tr key={customer.id}>
-                <td>{customer.company}</td>
-                <td>{customer.contact}</td>
+                <td>{customer.company_name}</td>
+                <td>{customer.contact_person}</td>
                 <td>{customer.email}</td>
                 <td>{customer.phone}</td>
                 <td>{customer.username}</td>
@@ -222,189 +222,126 @@ export default function Customers() {
           </div>
         </div>
       )}
+
+
+      {showModal && (
+        <div className="modal-overlay">
+
+          <div className="project-modal">
+
+            <h2>Add Customer</h2>
+
+            <input
+              type="text"
+              placeholder="Company Name"
+              value={
+                newCustomer.company_name
+              }
+              onChange={(e) =>
+                setNewCustomer({
+                  ...newCustomer,
+                  company_name:
+                    e.target.value,
+                })
+              }
+            />
+
+            <input
+              type="text"
+              placeholder="Contact Person"
+              value={
+                newCustomer.contact_person
+              }
+              onChange={(e) =>
+                setNewCustomer({
+                  ...newCustomer,
+                  contact_person:
+                    e.target.value,
+                })
+              }
+            />
+
+            <input
+              type="email"
+              placeholder="Email"
+              value={newCustomer.email}
+              onChange={(e) =>
+                setNewCustomer({
+                  ...newCustomer,
+                  email: e.target.value,
+                })
+              }
+            />
+
+            <input
+              type="text"
+              placeholder="Phone"
+              value={newCustomer.phone}
+              onChange={(e) =>
+                setNewCustomer({
+                  ...newCustomer,
+                  phone: e.target.value,
+                })
+              }
+            />
+
+            <input
+              type="text"
+              placeholder="Username"
+              value={
+                newCustomer.username
+              }
+              onChange={(e) =>
+                setNewCustomer({
+                  ...newCustomer,
+                  username:
+                    e.target.value,
+                })
+              }
+            />
+
+            <input
+              type="password"
+              placeholder="Password"
+              value={
+                newCustomer.password
+              }
+              onChange={(e) =>
+                setNewCustomer({
+                  ...newCustomer,
+                  password:
+                    e.target.value,
+                })
+              }
+            />
+
+            <div className="modal-actions">
+
+              <button
+                className="cancel-btn"
+                onClick={() =>
+                  setShowModal(false)
+                }
+              >
+                Cancel
+              </button>
+
+              <button
+                className="save-btn"
+                onClick={
+                  handleAddCustomer
+                }
+              >
+                Save Customer
+              </button>
+
+            </div>
+
+          </div>
+
+        </div>
+      )}
+
     </div>
   );
 }
-
-
-
-
-
-
-
-
-
-
-
-
-// import { useState } from "react";
-// import "./Customers.css";
-
-// export default function Customers() {
-//   const [customers, setCustomers] = useState([
-//     {
-//       id: 1,
-//       company: "ABC Industries",
-//       contact: "Arun Kumar",
-//       email: "abc@gmail.com",
-//       phone: "9876543210",
-//     },
-//     {
-//       id: 2,
-//       company: "XYZ Pvt Ltd",
-//       contact: "Rahul",
-//       email: "xyz@gmail.com",
-//       phone: "9876543211",
-//     },
-//   ]);
-
-//   const [showModal, setShowModal] = useState(false);
-
-//   const [newCustomer, setNewCustomer] = useState({
-//     company: "",
-//     contact: "",
-//     email: "",
-//     phone: "",
-//   });
-
-//   const handleAddCustomer = () => {
-//     if (
-//       !newCustomer.company ||
-//       !newCustomer.contact
-//     ) {
-//       alert("Please fill required fields");
-//       return;
-//     }
-
-//     setCustomers([
-//       ...customers,
-//       {
-//         id: Date.now(),
-//         ...newCustomer,
-//       },
-//     ]);
-
-//     setNewCustomer({
-//       company: "",
-//       contact: "",
-//       email: "",
-//       phone: "",
-//     });
-
-//     setShowModal(false);
-//   };
-
-//   return (
-//     <div className="customers-page">
-//       <div className="customers-header">
-//         <div>
-//           <h1>Customers</h1>
-//           <p>Manage customer accounts</p>
-//         </div>
-
-//         <button
-//           className="add-customer-btn"
-//           onClick={() => setShowModal(true)}
-//         >
-//           + Add Customer
-//         </button>
-//       </div>
-
-//       <div className="customers-table-card">
-//         <table className="customers-table">
-//           <thead>
-//             <tr>
-//               <th>Company</th>
-//               <th>Contact Person</th>
-//               <th>Email</th>
-//               <th>Phone</th>
-//             </tr>
-//           </thead>
-
-//           <tbody>
-//             {customers.map((customer) => (
-//               <tr key={customer.id}>
-//                 <td>{customer.company}</td>
-//                 <td>{customer.contact}</td>
-//                 <td>{customer.email}</td>
-//                 <td>{customer.phone}</td>
-//               </tr>
-//             ))}
-//           </tbody>
-//         </table>
-//       </div>
-
-//       {showModal && (
-//         <div className="modal-overlay">
-//           <div className="customer-modal">
-//             <h2>Add Customer</h2>
-
-//             <input
-//               type="text"
-//               placeholder="Company Name"
-//               value={newCustomer.company}
-//               onChange={(e) =>
-//                 setNewCustomer({
-//                   ...newCustomer,
-//                   company: e.target.value,
-//                 })
-//               }
-//             />
-
-//             <input
-//               type="text"
-//               placeholder="Contact Person"
-//               value={newCustomer.contact}
-//               onChange={(e) =>
-//                 setNewCustomer({
-//                   ...newCustomer,
-//                   contact: e.target.value,
-//                 })
-//               }
-//             />
-
-//             <input
-//               type="email"
-//               placeholder="Email"
-//               value={newCustomer.email}
-//               onChange={(e) =>
-//                 setNewCustomer({
-//                   ...newCustomer,
-//                   email: e.target.value,
-//                 })
-//               }
-//             />
-
-//             <input
-//               type="text"
-//               placeholder="Phone Number"
-//               value={newCustomer.phone}
-//               onChange={(e) =>
-//                 setNewCustomer({
-//                   ...newCustomer,
-//                   phone: e.target.value,
-//                 })
-//               }
-//             />
-
-//             <div className="modal-actions">
-//               <button
-//                 className="cancel-btn"
-//                 onClick={() => setShowModal(false)}
-//               >
-//                 Cancel
-//               </button>
-
-//               <button
-//                 className="save-btn"
-//                 onClick={handleAddCustomer}
-//               >
-//                 Save Customer
-//               </button>
-//             </div>
-//           </div>
-//         </div>
-//       )}
-//     </div>
-//   );
-// }

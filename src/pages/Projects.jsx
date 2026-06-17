@@ -1,62 +1,138 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "./Projects.css";
 import { useNavigate } from "react-router-dom";
 
 export default function Projects() {
   const navigate = useNavigate();
-  const [projects, setProjects] = useState([
-    {
-      id: 1,
-      projectName: "MCC Panel",
-      customer: "ABC Industries",
-      status: "Wiring",
-      dispatch: "Pending",
-    },
-    {
-      id: 2,
-      projectName: "PCC Panel",
-      customer: "XYZ Pvt Ltd",
-      status: "Testing",
-      dispatch: "Packing Completed",
-    },
-  ]);
 
+  const [projects, setProjects] = useState([]);
   const [showModal, setShowModal] = useState(false);
 
   const [newProject, setNewProject] = useState({
     projectName: "",
-    customer: "",
+    customer_id: "",
     status: "",
     dispatch: "",
   });
 
-  const handleAddProject = () => {
-    if (
-      !newProject.projectName ||
-      !newProject.customer
-    ) {
-      alert("Please fill all required fields");
-      return;
-    }
+  const [customers, setCustomers] =
+    useState([]);
 
-    setProjects([
-      ...projects,
-      {
-        id: Date.now(),
-        ...newProject,
-      },
-    ]);
-
-    setNewProject({
-      projectName: "",
-      customer: "",
-      status: "",
-      dispatch: "",
-    });
-
-    setShowModal(false);
+  const loadProjects = () => {
+    fetch(
+      "http://localhost:5001/api/projects"
+    )
+      .then((res) => res.json())
+      .then((data) => {
+        setProjects(data);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
   };
+
+
+  useEffect(() => {
+    loadProjects();
+  }, []);
+
+  const handleAddProject = async () => {
+    try {
+      const response = await fetch(
+        "http://localhost:5001/api/projects",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type":
+              "application/json",
+          },
+          body: JSON.stringify({
+            project_name:
+              newProject.projectName,
+
+            customer_id: Number(
+              newProject.customer_id
+            ),
+            status:
+              newProject.status,
+
+            dispatch_status:
+              newProject.dispatch,
+
+            po_number:
+              "CES-2026-NEW",
+
+            project_value: 0,
+          }),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to save project");
+      }
+
+      await response.json();
+
+      loadProjects();
+
+      setNewProject({
+        projectName: "",
+        customer_id: "",
+        status: "",
+        dispatch: "",
+      });
+
+      setShowModal(false);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+
+  useEffect(() => {
+
+    fetch(
+      "http://localhost:5001/api/customers"
+    )
+      .then((res) => res.json())
+      .then((data) => {
+        setCustomers(data);
+      });
+
+  }, []);
+
+
+
+  const handleDeleteProject =
+    async (id) => {
+
+      const confirmDelete =
+        window.confirm(
+          "Delete this project?"
+        );
+
+      if (!confirmDelete)
+        return;
+
+      try {
+
+        await fetch(
+          `http://localhost:5001/api/projects/${id}`,
+          {
+            method: "DELETE",
+          }
+        );
+
+        loadProjects();
+
+      } catch (error) {
+
+        console.error(error);
+
+      }
+    };
+
 
   return (
     <div className="projects-page">
@@ -83,19 +159,25 @@ export default function Projects() {
               <th>Status</th>
               <th>Dispatch</th>
               <th>Action</th>
+
             </tr>
           </thead>
+
 
           <tbody>
             {projects.map((project) => (
               <tr key={project.id}>
-                <td>{project.projectName}</td>
-                <td>{project.customer}</td>
+                <td>{project.project_name}</td>
+
+                {/* <td>{project.customer_id}</td> */}
+
+                <td>{project.company_name}</td>
+
                 <td>{project.status}</td>
-                <td>{project.dispatch}</td>
 
-                <td>
+                <td>{project.dispatch_status}</td>
 
+                {/* <td>
                   <button
                     className="view-btn"
                     onClick={() =>
@@ -104,10 +186,44 @@ export default function Projects() {
                   >
                     View
                   </button>
+                </td> */}
+
+
+                <td>
+
+                  <button
+                    className="view-btn"
+                    onClick={() =>
+                      navigate(
+                        `/projects/${project.id}`
+                      )
+                    }
+                  >
+                    View
+                  </button>
+
+                  <button
+                    className="delete-btn"
+                    onClick={() =>
+                      handleDeleteProject(
+                        project.id
+                      )
+                    }
+                  >
+                    Delete
+                  </button>
+
                 </td>
+
+
+
+
+
               </tr>
             ))}
           </tbody>
+
+
         </table>
       </div>
 
@@ -128,17 +244,33 @@ export default function Projects() {
               }
             />
 
-            <input
-              type="text"
-              placeholder="Customer Name"
-              value={newProject.customer}
+            <select  className="customer-select"
+              value={
+                newProject.customer_id
+              }
               onChange={(e) =>
                 setNewProject({
                   ...newProject,
-                  customer: e.target.value,
+                  customer_id:
+                    e.target.value,
                 })
               }
-            />
+            >
+              <option value="">
+                Select Customer
+              </option>
+
+              {customers.map(
+                (customer) => (
+                  <option
+                    key={customer.id}
+                    value={customer.id}
+                  >
+                    {customer.company_name}
+                  </option>
+                )
+              )}
+            </select>
 
             <input
               type="text"

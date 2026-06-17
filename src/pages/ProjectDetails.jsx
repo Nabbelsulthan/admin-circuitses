@@ -1,18 +1,35 @@
 
 import "./ProjectDetails.css";
 import { useParams } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+
+
+const stages = [
+    "Design",
+    "Fabrication",
+    "Assembly",
+    "Wiring",
+    "Testing",
+    "Dispatch",
+    "Delivered",
+];
 
 export default function ProjectDetails() {
     const { id } = useParams();
 
-    const project = {
-        id,
-        name: "MCC Panel",
-        customer: "ABC Industries",
-        status: "Wiring",
-        dispatch: "Packing Completed",
-    };
+    const [project, setProject] =
+        useState(null);
+
+    const [customer, setCustomer] =
+        useState(null);
+    const [currentStage, setCurrentStage] =
+        useState(3);
+
+    const [selectedStage, setSelectedStage] =
+        useState(3);
+
+    const [showProjectModal, setShowProjectModal] =
+        useState(false);
 
     const documents = [
         "GA Drawing.pdf",
@@ -25,33 +42,92 @@ export default function ProjectDetails() {
         "FAT Scheduled",
     ];
 
-    const stages = [
-        "Design",
-        "Fabrication",
-        "Assembly",
-        "Wiring",
-        "Testing",
-        "Dispatch",
-        "Delivered",
-    ];
 
-    // const currentStage = 3;
 
-    const [currentStage, setCurrentStage] =
-        useState(3);
 
-    const [selectedStage, setSelectedStage] =
-        useState(3);
+    const handleUpdateStage = async () => {
+        try {
+            await fetch(
+                `http://localhost:5001/api/projects/${id}`,
+                {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type":
+                            "application/json",
+                    },
+                    body: JSON.stringify({
+                        status:
+                            stages[selectedStage],
+                        dispatch_status:
+                            project.dispatch_status,
+                    }),
+                }
+            );
 
-    const [showProjectModal, setShowProjectModal] =
-        useState(false);
+            setCurrentStage(selectedStage);
 
+            alert("Stage Updated");
+
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+
+    useEffect(() => {
+
+        fetch(
+            `http://localhost:5001/api/projects/${id}`
+        )
+            .then((res) => res.json())
+            .then((data) => {
+                setProject(data);
+            })
+            .catch((err) => {
+                console.error(err);
+            });
+
+    }, [id]);
+
+    useEffect(() => {
+        if (project) {
+            const stageIndex =
+                stages.indexOf(project.status);
+
+            if (stageIndex !== -1) {
+                setCurrentStage(stageIndex);
+                setSelectedStage(stageIndex);
+            }
+        }
+    }, [project
+    ]);
+
+    useEffect(() => {
+
+        if (!project) return;
+
+        fetch(
+            `http://localhost:5001/api/customers/${project.customer_id}`
+        )
+            .then((res) => res.json())
+            .then((data) => {
+                setCustomer(data);
+            })
+            .catch((err) => {
+                console.error(err);
+            });
+
+    }, [project]);
+
+    if (!project || !customer) {
+        return <h2>Loading...</h2>;
+    }
     return (
         <div className="project-details">
 
             <div className="project-top">
-                <h1>{project.name}</h1>
-                <p>{project.customer}</p>
+                <h1>{project.project_name}</h1>
+                <p>{project.company_name}</p>
             </div>
 
             {/* details of projects  */}
@@ -76,22 +152,22 @@ export default function ProjectDetails() {
 
                     <div>
                         <label>Project Name</label>
-                        <p>MCC Panel</p>
+                        <p>{project.project_name}</p>
                     </div>
 
                     <div>
                         <label>Customer</label>
-                        <p>ABC Industries</p>
+                        <p>{project.company_name}</p>
                     </div>
 
                     <div>
                         <label>PO Number</label>
-                        <p>CES-2026-001</p>
+                        <p>{project.po_number}</p>
                     </div>
 
                     <div>
                         <label>Project Value</label>
-                        <p>₹ 8,50,000</p>
+                        <p>₹ {project.project_value}</p>
                     </div>
 
                     <div>
@@ -112,19 +188,7 @@ export default function ProjectDetails() {
                 <div className="detail-card">
                     <h3>Current Status</h3>
 
-                    {/* <select className="status-select"
-                        defaultValue={project.status}>
 
-
-
-                        <option>Design</option>
-                        <option>Fabrication</option>
-                        <option>Assembly</option>
-                        <option>Wiring</option>
-                        <option>Testing</option>
-                        <option>Dispatch</option>
-                        <option>Delivered</option>
-                    </select> */}
 
                     <select
                         className="status-select"
@@ -148,17 +212,12 @@ export default function ProjectDetails() {
 
                     <button
                         className="action-btn"
-                        onClick={() =>
-                            setCurrentStage(selectedStage)
-                        }
+                        onClick={handleUpdateStage}
                     >
                         Update Stage
                     </button>
 
-                    {/* <button className="action-btn">
-                        Update Stage
-                    </button> */}
-                    {/* <p>{project.status}</p> */}
+
                 </div>
 
                 <div className="detail-card">
@@ -177,7 +236,7 @@ export default function ProjectDetails() {
                     <button className="action-btn">
                         Update Dispatch
                     </button>
-                    {/* <p>{project.dispatch}</p> */}
+
                 </div>
 
             </div>
@@ -192,22 +251,22 @@ export default function ProjectDetails() {
 
                     <div>
                         <label>Company</label>
-                        <p>ABC Industries</p>
+                        <p>{customer.company_name}</p>
                     </div>
 
                     <div>
                         <label>Contact Person</label>
-                        <p>Arun Kumar</p>
+                        <p>{customer.contact_person}</p>
                     </div>
 
                     <div>
                         <label>Email</label>
-                        <p>arun@abc.com</p>
+                        <p>{customer.email}</p>
                     </div>
 
                     <div>
                         <label>Phone</label>
-                        <p>9876543210</p>
+                        <p>{customer.phone}</p>
                     </div>
 
                 </div>
