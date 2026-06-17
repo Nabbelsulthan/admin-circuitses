@@ -31,11 +31,13 @@ export default function ProjectDetails() {
     const [showProjectModal, setShowProjectModal] =
         useState(false);
 
-    const documents = [
-        "GA Drawing.pdf",
-        "FAT Report.pdf",
-        "SLD.pdf",
-    ];
+
+    const [documents, setDocuments] =
+        useState([]);
+
+    const [selectedFile, setSelectedFile] =
+        useState(null);
+
 
     const updates = [
         "Wiring Completed",
@@ -87,6 +89,15 @@ export default function ProjectDetails() {
                 console.error(err);
             });
 
+        fetch(
+            `http://localhost:5001/api/documents/${id}`
+        )
+            .then((res) => res.json())
+            .then((data) => {
+                setDocuments(data);
+            });
+
+
     }, [id]);
 
     useEffect(() => {
@@ -122,6 +133,106 @@ export default function ProjectDetails() {
     if (!project || !customer) {
         return <h2>Loading...</h2>;
     }
+
+
+    const handleUploadDocument =
+        async () => {
+
+            if (!selectedFile) {
+                alert(
+                    "Please select a file"
+                );
+                return;
+            }
+
+            const formData =
+                new FormData();
+
+            formData.append(
+                "project_id",
+                id
+            );
+
+            formData.append(
+                "document",
+                selectedFile
+            );
+
+            try {
+
+                await fetch(
+                    "http://localhost:5001/api/documents",
+                    {
+                        method: "POST",
+                        body: formData,
+                    }
+                );
+
+                const response =
+                    await fetch(
+                        `http://localhost:5001/api/documents/${id}`
+                    );
+
+                const docs =
+                    await response.json();
+
+                setDocuments(docs);
+
+                setSelectedFile(null);
+
+                alert(
+                    "Document Uploaded"
+                );
+
+            } catch (error) {
+
+                console.error(error);
+
+            }
+
+        };
+
+    const handleDeleteDocument =
+        async (documentId) => {
+
+            const confirmDelete =
+                window.confirm(
+                    "Delete this document?"
+                );
+
+            if (!confirmDelete)
+                return;
+
+            try {
+
+                await fetch(
+                    `http://localhost:5001/api/documents/${documentId}`,
+                    {
+                        method: "DELETE",
+                    }
+                );
+
+                const response =
+                    await fetch(
+                        `http://localhost:5001/api/documents/${id}`
+                    );
+
+                const docs =
+                    await response.json();
+
+                setDocuments(docs);
+
+            } catch (error) {
+
+                console.error(error);
+
+            }
+
+        };
+
+
+
+
     return (
         <div className="project-details">
 
@@ -347,22 +458,82 @@ export default function ProjectDetails() {
             <div className="details-grid">
 
                 <div className="detail-card">
+
                     <div className="card-header">
+
                         <h3>Documents</h3>
 
-                        <button className="mini-btn">
-                            + Upload
-                        </button>
                     </div>
 
-                    {documents.map((doc) => (
+                    <input
+                        type="file"
+                        onChange={(e) =>
+                            setSelectedFile(
+                                e.target.files[0]
+                            )
+                        }
+                    />
+
+                    <button
+                        className="mini-btn"
+                        onClick={
+                            handleUploadDocument
+                        }
+                    >
+                        Upload
+                    </button>
+
+                    {/* {documents.map((doc) => (
+
                         <div
-                            key={doc}
+                            key={doc.id}
                             className="list-item"
                         >
-                            {doc}
+                            {doc.file_name}
                         </div>
+
+                    ))} */}
+
+
+                    {documents.map((doc) => (
+
+                        <div
+                            key={doc.id}
+                            className="document-item"
+                        >
+
+                            <span>
+                                📄 {doc.file_name}
+                            </span>
+
+                            <div className="document-actions">
+
+                                <a
+                                    href={`http://localhost:5001/${doc.file_path}`}
+                                    target="_blank"
+                                    rel="noreferrer"
+                                    className="download-btn"
+                                >
+                                    Download
+                                </a>
+
+                                <button
+                                    className="delete-doc-btn"
+                                    onClick={() =>
+                                        handleDeleteDocument(
+                                            doc.id
+                                        )
+                                    }
+                                >
+                                    Delete
+                                </button>
+
+                            </div>
+
+                        </div>
+
                     ))}
+
                 </div>
 
                 <div className="detail-card">

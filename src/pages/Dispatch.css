@@ -62,3 +62,12 @@
 
   cursor: pointer;
 }
+
+.clickable {
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.clickable:hover {
+  transform: translateY(-4px);
+}

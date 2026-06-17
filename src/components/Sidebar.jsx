@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import FolderIcon from "@mui/icons-material/Folder";
 import PeopleIcon from "@mui/icons-material/People";
-import DescriptionIcon from "@mui/icons-material/Description";
+// import DescriptionIcon from "@mui/icons-material/Description";
 import LocalShippingIcon from "@mui/icons-material/LocalShipping";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 
@@ -44,13 +44,13 @@ export default function Sidebar() {
           <span>Customers</span>
         </div>
 
-        <div
+        {/* <div
           className="menu-item"
           onClick={() => navigate("/documents")}
         >
           <DescriptionIcon />
           <span>Documents</span>
-        </div>
+        </div> */}
 
         <div
           className="menu-item"
