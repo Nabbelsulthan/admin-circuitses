@@ -70,6 +70,18 @@ export default function ProjectDetails() {
             expected_delivery: "",
         });
 
+
+    const [fatReports, setFatReports] =
+        useState([]);
+
+    const [showFatModal,
+        setShowFatModal] =
+        useState(false);
+
+    const [fatFile,
+        setFatFile] =
+        useState(null);
+
     const handleUpdateStage = async () => {
         try {
             await fetch(
@@ -147,6 +159,22 @@ export default function ProjectDetails() {
             .then((res) => res.json())
             .then((data) => {
                 setUpdates(data);
+            });
+
+
+        fetch(
+            `http://localhost:5001/api/fat-reports/${id}`
+        )
+            .then((res) => res.json())
+            .then((data) => {
+
+                console.log(
+                    "FAT Reports:",
+                    data
+                );
+
+                setFatReports(data);
+
             });
 
     }, [id]);
@@ -372,11 +400,34 @@ export default function ProjectDetails() {
                                 "application/json",
                         },
 
+
                         body: JSON.stringify({
+
+                            project_name:
+                                project.project_name,
+
+                            po_number:
+                                project.po_number,
+
+                            project_value:
+                                project.project_value,
+
+
+
+
+                            start_date:
+                                project.start_date
+                                    ?.split("T")[0],
+
+                            expected_delivery:
+                                project.expected_delivery
+                                    ?.split("T")[0],
+
                             status:
                                 project.status,
 
                             ...dispatchData,
+
                         }),
                     }
                 );
@@ -388,6 +439,8 @@ export default function ProjectDetails() {
 
                 const updatedProject =
                     await response.json();
+
+                console.log(updatedProject);
 
                 setProject(
                     updatedProject
@@ -456,6 +509,85 @@ export default function ProjectDetails() {
                 console.error(error);
 
             }
+
+        };
+
+
+
+    const handleFatUpload =
+        async () => {
+
+            if (!fatFile) return;
+
+            const formData =
+                new FormData();
+
+            formData.append(
+                "project_id",
+                id
+            );
+
+            formData.append(
+                "report",
+                fatFile
+            );
+
+            try {
+
+                await fetch(
+                    "http://localhost:5001/api/fat-reports",
+                    {
+                        method: "POST",
+                        body: formData,
+                    }
+                );
+
+                const response =
+                    await fetch(
+                        `http://localhost:5001/api/fat-reports/${id}`
+                    );
+
+                const data =
+                    await response.json();
+
+
+                console.log(
+                    "FAT Reports:",
+                    data
+                );
+
+                setFatReports(data);
+
+                setShowFatModal(
+                    false
+                );
+
+                setFatFile(null);
+
+            } catch (error) {
+
+                console.error(error);
+
+            }
+
+        };
+
+    const deleteFatReport =
+        async (reportId) => {
+
+            await fetch(
+                `http://localhost:5001/api/fat-reports/${reportId}`,
+                {
+                    method: "DELETE",
+                }
+            );
+
+            setFatReports(
+                fatReports.filter(
+                    (report) =>
+                        report.id !== reportId
+                )
+            );
 
         };
 
@@ -534,11 +666,21 @@ export default function ProjectDetails() {
                     <div>
                         <label>Start Date</label>
 
+
+
+
                         <p>
                             {project.start_date
                                 ? new Date(
                                     project.start_date
-                                ).toLocaleDateString("en-IN")
+                                ).toLocaleDateString(
+                                    "en-IN",
+                                    {
+                                        day: "2-digit",
+                                        month: "short",
+                                        year: "numeric",
+                                    }
+                                )
                                 : "-"}
                         </p>
 
@@ -550,7 +692,14 @@ export default function ProjectDetails() {
                             {project.expected_delivery
                                 ? new Date(
                                     project.expected_delivery
-                                ).toLocaleDateString("en-IN")
+                                ).toLocaleDateString(
+                                    "en-IN",
+                                    {
+                                        day: "2-digit",
+                                        month: "short",
+                                        year: "numeric",
+                                    }
+                                )
                                 : "-"}
                         </p>
                     </div>
@@ -595,24 +744,6 @@ export default function ProjectDetails() {
 
                 </div>
 
-                {/* <div className="detail-card">
-                    <h3>Dispatch Status</h3>
-
-                    <select className="status-select"
-                        defaultValue={project.dispatch}>
-                        <option>Pending</option>
-                        <option>Packing Started</option>
-                        <option>Packing Completed</option>
-                        <option>Ready For Dispatch</option>
-                        <option>Dispatched</option>
-                        <option>Delivered</option>
-                    </select>
-
-                    <button className="action-btn">
-                        Update Dispatch
-                    </button>
-
-                </div> */}
 
             </div>
 
@@ -721,14 +852,36 @@ export default function ProjectDetails() {
                     <div>
                         <label>Dispatch Date</label>
                         <p>
-                            {project.dispatch_date || "-"}
+                            {project.dispatch_date
+                                ? new Date(
+                                    project.dispatch_date
+                                ).toLocaleDateString(
+                                    "en-IN",
+                                    {
+                                        day: "2-digit",
+                                        month: "short",
+                                        year: "numeric",
+                                    }
+                                )
+                                : "-"}
                         </p>
                     </div>
 
                     <div>
                         <label>Expected Delivery</label>
                         <p>
-                            {project.delivery_date || "-"}
+                            {project.delivery_date
+                                ? new Date(
+                                    project.delivery_date
+                                ).toLocaleDateString(
+                                    "en-IN",
+                                    {
+                                        day: "2-digit",
+                                        month: "short",
+                                        year: "numeric",
+                                    }
+                                )
+                                : "-"}
                         </p>
                     </div>
 
@@ -763,18 +916,6 @@ export default function ProjectDetails() {
                     >
                         Upload
                     </button>
-
-                    {/* {documents.map((doc) => (
-
-                        <div
-                            key={doc.id}
-                            className="list-item"
-                        >
-                            {doc.file_name}
-                        </div>
-
-                    ))} */}
-
 
                     {documents.map((doc) => (
 
@@ -894,18 +1035,58 @@ export default function ProjectDetails() {
                     <div className="card-header">
                         <h3>FAT Reports</h3>
 
-                        <button className="mini-btn">
+                        <button
+                            className="mini-btn"
+                            onClick={() =>
+                                setShowFatModal(true)
+                            }
+                        >
                             + Upload FAT
                         </button>
                     </div>
 
-                    <div className="list-item">
-                        FAT Report Rev 01.pdf
-                    </div>
+                    {/* <p>
+                        FAT Count:
+                        {fatReports.length}
+                    </p> */}
+                    {fatReports.map((report) => (
 
-                    <div className="list-item">
-                        FAT Checklist.pdf
-                    </div>
+                        <div
+                            key={report.id}
+                            className="list-item"
+                        >
+
+                            <span>
+                                {report.report_name}
+                            </span>
+
+                            <div>
+
+                                <a
+                                    href={`http://localhost:5001/${report.file_path}`}
+                                    target="_blank"
+                                    rel="noreferrer"
+                                    className="mini-btn"
+                                >
+                                    View
+                                </a>
+
+                                <button
+                                    className="delete-btn"
+                                    onClick={() =>
+                                        deleteFatReport(
+                                            report.id
+                                        )
+                                    }
+                                >
+                                    Delete
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                    ))}
 
                 </div>
 
@@ -1176,6 +1357,57 @@ export default function ProjectDetails() {
                                 }
                             >
                                 Save
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            )}
+
+
+            {showFatModal && (
+
+                <div className="modal-overlay">
+
+                    <div className="project-modal">
+
+                        <h2>
+                            Upload FAT Report
+                        </h2>
+
+                        <input
+                            type="file"
+                            accept=".pdf"
+                            onChange={(e) =>
+                                setFatFile(
+                                    e.target.files[0]
+                                )
+                            }
+                        />
+
+                        <div className="modal-actions">
+
+                            <button
+                                className="cancel-btn"
+                                onClick={() =>
+                                    setShowFatModal(
+                                        false
+                                    )
+                                }
+                            >
+                                Cancel
+                            </button>
+
+                            <button
+                                className="save-btn"
+                                onClick={
+                                    handleFatUpload
+                                }
+                            >
+                                Upload
                             </button>
 
                         </div>
