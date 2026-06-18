@@ -29,24 +29,66 @@ export default function Login() {
       />
     );
   }
-  const handleLogin = (e) => {
-    e.preventDefault();
 
 
-    if (
-      email === "admin@circuitses.com" &&
-      password === "admin123"
-    ) {
-      localStorage.setItem("isLoggedIn", "true");
 
-      navigate("/dashboard", {
-        replace: true,
-      });
-    } else {
-      setError("Invalid email or password");
-    }
+  const handleLogin =
+    async (e) => {
 
-  };
+      e.preventDefault();
+
+      try {
+
+        const response =
+          await fetch(
+            "http://localhost:5001/api/auth/login",
+            {
+              method: "POST",
+
+              headers: {
+                "Content-Type":
+                  "application/json",
+              },
+
+              body:
+                JSON.stringify({
+                  username : email,
+                  password,
+                }),
+            }
+          );
+
+        const data =
+          await response.json();
+
+        if (
+          response.ok
+        ) {
+
+          localStorage.setItem(
+            "isLoggedIn",
+            true
+          );
+
+          navigate(
+            "/dashboard"
+          );
+
+        } else {
+
+          alert(
+            data.message
+          );
+
+        }
+
+      } catch (error) {
+
+        console.error(error);
+
+      }
+
+    };
 
   return (
     <div className="login-page">
@@ -156,3 +198,11 @@ export default function Login() {
     </div>
   );
 }
+
+
+
+
+
+
+
+

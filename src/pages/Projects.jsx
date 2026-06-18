@@ -244,7 +244,7 @@ export default function Projects() {
               }
             />
 
-            <select  className="customer-select"
+            <select className="customer-select"
               value={
                 newProject.customer_id
               }
@@ -272,9 +272,10 @@ export default function Projects() {
               )}
             </select>
 
-            <input
-              type="text"
-              placeholder="Current Status"
+
+
+
+            <select
               value={newProject.status}
               onChange={(e) =>
                 setNewProject({
@@ -282,11 +283,49 @@ export default function Projects() {
                   status: e.target.value,
                 })
               }
-            />
+            >
 
-            <input
-              type="text"
-              placeholder="Dispatch Status"
+              <option value="">
+                Select Status
+              </option>
+
+              <option value="In Discussion">
+                In Discussion
+              </option>
+
+              <option value="Design">
+                Design
+              </option>
+
+              <option value="Fabrication">
+                Fabrication
+              </option>
+
+              <option value="Assembly">
+                Assembly
+              </option>
+
+              <option value="Wiring">
+                Wiring
+              </option>
+
+              <option value="Testing">
+                Testing
+              </option>
+
+              <option value="Dispatch">
+                Dispatch
+              </option>
+
+              <option value="Delivered">
+                Delivered
+              </option>
+
+            </select>
+         
+
+
+            <select
               value={newProject.dispatch}
               onChange={(e) =>
                 setNewProject({
@@ -294,7 +333,37 @@ export default function Projects() {
                   dispatch: e.target.value,
                 })
               }
-            />
+            >
+
+              <option value="">
+                Select Dispatch Status
+              </option>
+
+              <option value="Not Applicable">
+                Not Applicable
+              </option>
+
+              <option value="Packing Completed">
+                Packing Completed
+              </option>
+
+              <option value="Ready For Dispatch">
+                Ready For Dispatch
+              </option>
+
+              <option value="Dispatched">
+                Dispatched
+              </option>
+
+              <option value="In Transit">
+                In Transit
+              </option>
+
+              <option value="Delivered">
+                Delivered
+              </option>
+
+            </select>
 
             <div className="modal-actions">
               <button

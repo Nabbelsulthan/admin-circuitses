@@ -82,32 +82,113 @@ export default function ProjectDetails() {
         setFatFile] =
         useState(null);
 
+
+    const [showGalleryModal,
+        setShowGalleryModal] =
+        useState(false);
+
+    const [selectedImage,
+        setSelectedImage] =
+        useState(null);
+
+    const [previewImage,
+        setPreviewImage] =
+        useState(null);
+
+    const [caption,
+        setCaption] =
+        useState("");
+
+
+    const [gallery, setGallery] =
+        useState([]);
+
+
+
     const handleUpdateStage = async () => {
+
         try {
+
             await fetch(
                 `http://localhost:5001/api/projects/${id}`,
                 {
                     method: "PUT",
+
                     headers: {
                         "Content-Type":
                             "application/json",
                     },
+
                     body: JSON.stringify({
+
+                        project_name:
+                            project.project_name,
+
+                        po_number:
+                            project.po_number,
+
+                        project_value:
+                            project.project_value,
+
+                        start_date:
+                            project.start_date
+                                ?.split("T")[0],
+
+                        expected_delivery:
+                            project.expected_delivery
+                                ?.split("T")[0],
+
                         status:
                             stages[selectedStage],
+
                         dispatch_status:
                             project.dispatch_status,
+
+                        transporter:
+                            project.transporter,
+
+                        lr_number:
+                            project.lr_number,
+
+                        vehicle_number:
+                            project.vehicle_number,
+
+                        dispatch_date:
+                            project.dispatch_date
+                                ? project.dispatch_date
+                                    .split("T")[0]
+                                : null,
+
+                        delivery_date:
+                            project.delivery_date
+                                ? project.delivery_date
+                                    .split("T")[0]
+                                : null,
+
                     }),
                 }
             );
 
-            setCurrentStage(selectedStage);
+            const response =
+                await fetch(
+                    `http://localhost:5001/api/projects/${id}`
+                );
 
-            alert("Stage Updated");
+            const updatedProject =
+                await response.json();
+
+            setProject(updatedProject);
+
+            alert(
+                "Stage Updated"
+            );
 
         } catch (error) {
+
             console.error(error);
+
         }
+
     };
 
 
@@ -175,6 +256,14 @@ export default function ProjectDetails() {
 
                 setFatReports(data);
 
+            });
+
+        fetch(
+            `http://localhost:5001/api/gallery/${id}`
+        )
+            .then((res) => res.json())
+            .then((data) => {
+                setGallery(data);
             });
 
     }, [id]);
@@ -483,6 +572,24 @@ export default function ProjectDetails() {
                             body: JSON.stringify({
                                 ...project,
                                 ...editProject,
+
+                                project_value:
+                                    (
+                                        editProject.project_value ??
+                                        project.project_value
+                                    )
+                                        ?.toString()
+                                        .replace(/,/g, ""),
+
+                                start_date:
+                                    editProject.start_date ||
+                                    project.start_date ||
+                                    null,
+
+                                expected_delivery:
+                                    editProject.expected_delivery ||
+                                    project.expected_delivery ||
+                                    null,
                             }),
                         }
                     );
@@ -588,6 +695,141 @@ export default function ProjectDetails() {
                         report.id !== reportId
                 )
             );
+
+        };
+
+    const handleUploadImage =
+        async () => {
+
+            try {
+
+                if (!selectedImage) {
+
+                    alert(
+                        "Please select an image"
+                    );
+
+                    return;
+
+                }
+
+                if (!caption) {
+
+                    alert(
+                        "Please select a stage"
+                    );
+
+                    return;
+
+                }
+
+                const formData =
+                    new FormData();
+
+                formData.append(
+                    "project_id",
+                    id
+                );
+
+                formData.append(
+                    "caption",
+                    caption
+                );
+
+                formData.append(
+                    "image",
+                    selectedImage
+                );
+
+                const response =
+                    await fetch(
+                        "http://localhost:5001/api/gallery",
+                        {
+                            method: "POST",
+                            body: formData,
+                        }
+                    );
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        "Upload Failed"
+                    );
+
+                }
+
+                await response.json();
+
+                alert(
+                    "Image Uploaded Successfully"
+                );
+
+                setShowGalleryModal(
+                    false
+                );
+
+                setSelectedImage(
+                    null
+                );
+
+                setCaption("");
+
+                loadGallery();
+
+            } catch (error) {
+
+                console.error(error);
+
+                alert(
+                    "Failed To Upload Image"
+                );
+
+            }
+
+        };
+
+    const loadGallery =
+        async () => {
+
+            const response =
+                await fetch(
+                    `http://localhost:5001/api/gallery/${id}`
+                );
+
+            const data =
+                await response.json();
+
+            setGallery(data);
+
+        };
+
+    const handleDeleteImage =
+        async (imageId) => {
+
+            const confirmDelete =
+                window.confirm(
+                    "Delete this image?"
+                );
+
+            if (!confirmDelete)
+                return;
+
+            try {
+
+                await fetch(
+                    `http://localhost:5001/api/gallery/${imageId}`,
+                    {
+                        method: "DELETE",
+                    }
+                );
+
+                loadGallery();
+
+            } catch (error) {
+
+                console.error(error);
+
+            }
 
         };
 
@@ -1045,10 +1287,7 @@ export default function ProjectDetails() {
                         </button>
                     </div>
 
-                    {/* <p>
-                        FAT Count:
-                        {fatReports.length}
-                    </p> */}
+
                     {fatReports.map((report) => (
 
                         <div
@@ -1110,6 +1349,74 @@ export default function ProjectDetails() {
 
                 </div>
 
+                <div className="detail-card">
+
+                    <div className="card-header">
+
+                        <h3>
+                            Progress Gallery
+                        </h3>
+
+                        <button
+                            className="mini-btn"
+                            onClick={() =>
+                                setShowGalleryModal(true)
+                            }
+                        >
+                            + Upload Image
+                        </button>
+
+                    </div>
+
+                    {gallery.length === 0 ? (
+
+                        <p>
+                            No Images Uploaded
+                        </p>
+
+                    ) : (
+
+                        gallery.map((image) => (
+
+                            <div
+                                key={image.id}
+                                className="gallery-item"
+                            >
+
+                                <img
+                                    src={`http://localhost:5001/${image.image_path}`}
+                                    alt={image.caption}
+                                    className="gallery-preview"
+                                    onClick={() =>
+                                        setPreviewImage(
+                                            `http://localhost:5001/${image.image_path}`
+                                        )
+                                    }
+                                />
+
+                                <p>
+                                    {image.caption}
+                                </p>
+
+                                <button
+                                    className="delete-image-btn"
+                                    onClick={() =>
+                                        handleDeleteImage(
+                                            image.id
+                                        )
+                                    }
+                                >
+                                    Delete
+                                </button>
+
+                            </div>
+
+                        ))
+
+                    )}
+
+                </div>
+
             </div>
 
 
@@ -1149,13 +1456,15 @@ export default function ProjectDetails() {
                             }
                         />
                         <input
-                            type="text"
+                            type="number"
                             value={
                                 editProject.project_value
                             }
                             onChange={(e) =>
                                 setEditProject({
                                     ...editProject,
+
+
                                     project_value:
                                         e.target.value,
                                 })
@@ -1413,6 +1722,121 @@ export default function ProjectDetails() {
                         </div>
 
                     </div>
+
+                </div>
+
+            )}
+
+            {showGalleryModal && (
+
+                <div className="modal-overlay">
+
+                    <div className="project-modal">
+
+                        <h2>
+                            Upload Progress Image
+                        </h2>
+
+                        <input
+                            type="file"
+                            accept="image/*"
+                            onChange={(e) =>
+                                setSelectedImage(
+                                    e.target.files[0]
+                                )
+                            }
+                        />
+
+                        <select
+                            value={caption}
+                            onChange={(e) =>
+                                setCaption(
+                                    e.target.value
+                                )
+                            }
+                        >
+
+                            <option value="">
+                                Select Stage
+                            </option>
+
+                            <option value="Design">
+                                Design
+                            </option>
+
+                            <option value="Fabrication">
+                                Fabrication
+                            </option>
+
+                            <option value="Assembly">
+                                Assembly
+                            </option>
+
+                            <option value="Wiring">
+                                Wiring
+                            </option>
+
+                            <option value="Testing">
+                                Testing
+                            </option>
+
+                            <option value="Dispatch">
+                                Dispatch
+                            </option>
+
+                            <option value="Delivered">
+                                Delivered
+                            </option>
+
+                        </select>
+
+                        <div className="modal-actions">
+
+                            <button
+                                className="cancel-btn"
+                                onClick={() =>
+                                    setShowGalleryModal(
+                                        false
+                                    )
+                                }
+                            >
+                                Cancel
+                            </button>
+
+                            <button
+                                className="save-btn"
+                                onClick={
+                                    handleUploadImage
+                                }
+                            >
+                                Upload
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            )}
+
+            {previewImage && (
+
+                <div
+                    className="image-modal"
+                    onClick={() =>
+                        setPreviewImage(null)
+                    }
+                >
+
+                    <img
+                        src={previewImage}
+                        alt="Preview"
+                        className="image-preview"
+                        onClick={(e) =>
+                            e.stopPropagation()
+                        }
+                    />
 
                 </div>
 

@@ -185,3 +185,26 @@
   background: #fff;
   color: #334155;
 }
+
+
+.project-modal select {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  background: #f9fafb;
+  font-size: 14px;
+  color: #111827;
+  margin-bottom: 14px;
+  transition: all 0.25s ease;
+}
+
+.project-modal select:focus {
+  background: #fff;
+  border-color: #78b82a;
+  box-shadow: 0 0 0 4px rgba(120, 184, 42, 0.12);
+}
+
+.project-modal select:hover {
+  background: #fff;
+}
