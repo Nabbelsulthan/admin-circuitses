@@ -14,6 +14,9 @@ export default function Projects() {
     customer_id: "",
     status: "",
     dispatch: "",
+    panel_type: "",
+    project_engineer: "",
+    completion_percentage: 0,
   });
 
   const [customers, setCustomers] =
@@ -36,6 +39,17 @@ export default function Projects() {
   useEffect(() => {
     loadProjects();
   }, []);
+
+  const completionMap = {
+    "In Discussion": 5,
+    "Design": 15,
+    "Fabrication": 35,
+    "Assembly": 55,
+    "Wiring": 75,
+    "Testing": 90,
+    "Dispatch": 95,
+    "Delivered": 100,
+  };
 
   const handleAddProject = async () => {
     try {
@@ -64,6 +78,17 @@ export default function Projects() {
               "CES-2026-NEW",
 
             project_value: 0,
+
+            panel_type:
+              newProject.panel_type,
+
+            project_engineer:
+              newProject.project_engineer,
+
+            completion_percentage:
+              completionMap[
+              newProject.status
+              ] || 0,
           }),
         }
       );
@@ -81,6 +106,9 @@ export default function Projects() {
         customer_id: "",
         status: "",
         dispatch: "",
+        panel_type: "",
+        project_engineer: "",
+        completion_percentage: 0,
       });
 
       setShowModal(false);
@@ -158,7 +186,10 @@ export default function Projects() {
               <th>Customer</th>
               <th>Status</th>
               <th>Dispatch</th>
+              <th>Panel Type</th>
+              <th>Engineer</th>
               <th>Action</th>
+
 
             </tr>
           </thead>
@@ -177,6 +208,11 @@ export default function Projects() {
 
                 <td>{project.dispatch_status}</td>
 
+                <td>{project.panel_type}</td>
+
+                <td>
+                  {project.project_engineer}
+                </td>
                 {/* <td>
                   <button
                     className="view-btn"
@@ -214,6 +250,9 @@ export default function Projects() {
                   </button>
 
                 </td>
+
+
+
 
 
 
@@ -272,7 +311,60 @@ export default function Projects() {
               )}
             </select>
 
+            <select
+              value={newProject.panel_type}
+              onChange={(e) =>
+                setNewProject({
+                  ...newProject,
+                  panel_type:
+                    e.target.value,
+                })
+              }
+            >
+              <option value="">
+                Select Panel Type
+              </option>
 
+              <option value="MCC Panel">
+                MCC Panel
+              </option>
+
+              <option value="PCC Panel">
+                PCC Panel
+              </option>
+
+              <option value="APFC Panel">
+                APFC Panel
+              </option>
+
+              <option value="Control Panel">
+                Control Panel
+              </option>
+
+              <option value="PLC Panel">
+                PLC Panel
+              </option>
+
+              <option value="Metering Panel">
+                Metering Panel
+              </option>
+            </select>
+
+
+            <input
+              type="text"
+              placeholder="Project Engineer"
+              value={
+                newProject.project_engineer
+              }
+              onChange={(e) =>
+                setNewProject({
+                  ...newProject,
+                  project_engineer:
+                    e.target.value,
+                })
+              }
+            />
 
 
             <select
@@ -322,7 +414,7 @@ export default function Projects() {
               </option>
 
             </select>
-         
+
 
 
             <select

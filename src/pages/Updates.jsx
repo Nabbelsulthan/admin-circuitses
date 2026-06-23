@@ -1,5 +1,6 @@
 import { useState } from "react";
 import "./Updates.css";
+import { toast } from "react-toastify";
 
 export default function Updates() {
   const [updates, setUpdates] = useState([
@@ -31,7 +32,8 @@ export default function Updates() {
       !newUpdate.title ||
       !newUpdate.date
     ) {
-      alert("Please fill all fields");
+      toast.warning("Please fill all fields")
+      // alert("Please fill all fields");
       return;
     }
 

@@ -1,6 +1,7 @@
 import "./CustomerDetails.css";
 import { useParams, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
+import { toast } from "react-toastify";
 
 export default function CustomerDetails() {
 
@@ -23,8 +24,24 @@ export default function CustomerDetails() {
       username: "",
     });
 
+  const [showPasswordModal,
+    setShowPasswordModal] =
+    useState(false);
+
+  const [newPassword,
+    setNewPassword] =
+    useState("");
+
   const [projects, setProjects] =
     useState([]);
+
+  const [documentCount,
+    setDocumentCount] =
+    useState(0);
+
+  const [updateCount,
+    setUpdateCount] =
+    useState(0);
 
   useEffect(() => {
 
@@ -42,6 +59,22 @@ export default function CustomerDetails() {
       .then((res) => res.json())
       .then((data) => {
         setProjects(data);
+      });
+
+    fetch(
+      `http://localhost:5001/api/customers/${id}/stats`
+    )
+      .then((res) => res.json())
+      .then((data) => {
+
+        setDocumentCount(
+          data.documents
+        );
+
+        setUpdateCount(
+          data.updates
+        );
+
       });
 
   }, [id]);
@@ -79,16 +112,69 @@ export default function CustomerDetails() {
         );
 
         setShowEditModal(false);
+        toast.success("Customer updated successfully");
 
-        alert(
-          "Customer Updated"
-        );
+        // alert(
+        //   "Customer Updated"
+        // );
 
       } catch (error) {
 
         console.error(error);
 
       }
+    };
+
+
+  const handleResetPassword =
+    async () => {
+
+      if (!newPassword) {
+
+        toast.warning(
+          "Please enter a password"
+        );
+
+        return;
+      }
+
+      try {
+
+        await fetch(
+          `http://localhost:5001/api/customers/${id}/reset-password`,
+          {
+            method: "PUT",
+            headers: {
+              "Content-Type":
+                "application/json",
+            },
+            body: JSON.stringify({
+              password:
+                newPassword,
+            }),
+          }
+        );
+
+        toast.success(
+          "Password reset successfully"
+        );
+
+        setShowPasswordModal(
+          false
+        );
+
+        setNewPassword("");
+
+      } catch (error) {
+
+        console.error(error);
+
+        toast.error(
+          "Failed to reset password"
+        );
+
+      }
+
     };
 
   return (
@@ -145,12 +231,12 @@ export default function CustomerDetails() {
 
         <div className="summary-card">
           <h4>Documents</h4>
-          <span>0</span>
+          <span>{documentCount}</span>
         </div>
 
         <div className="summary-card">
           <h4>Updates</h4>
-          <span>0</span>
+          <span>{updateCount}</span>
         </div>
 
       </div>
@@ -191,7 +277,14 @@ export default function CustomerDetails() {
             <p>{customer.username}</p>
           </div>
 
-          <button className="action-btn">
+          <button
+            className="action-btn"
+            onClick={() =>
+              setShowPasswordModal(
+                true
+              )
+            }
+          >
             Reset Password
           </button>
 
@@ -351,6 +444,59 @@ export default function CustomerDetails() {
         </div>
 
       )}
+
+
+      {showPasswordModal && (
+
+        <div className="modal-overlay">
+
+          <div className="project-modal">
+
+            <h2>
+              Reset Password
+            </h2>
+
+            <input
+              type="password"
+              placeholder="New Password"
+              value={newPassword}
+              onChange={(e) =>
+                setNewPassword(
+                  e.target.value
+                )
+              }
+            />
+
+            <div className="modal-actions">
+
+              <button
+                className="cancel-btn"
+                onClick={() =>
+                  setShowPasswordModal(
+                    false
+                  )
+                }
+              >
+                Cancel
+              </button>
+
+              <button
+                className="save-btn"
+                onClick={
+                  handleResetPassword
+                }
+              >
+                Reset Password
+              </button>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      )}
+
 
     </div>
   );

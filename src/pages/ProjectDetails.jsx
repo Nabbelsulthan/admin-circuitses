@@ -2,6 +2,7 @@
 import "./ProjectDetails.css";
 import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
+import { toast } from "react-toastify";
 
 
 const stages = [
@@ -13,6 +14,17 @@ const stages = [
     "Dispatch",
     "Delivered",
 ];
+
+const completionMap = {
+    "In Discussion": 5,
+    "Design": 15,
+    "Fabrication": 35,
+    "Assembly": 55,
+    "Wiring": 75,
+    "Testing": 90,
+    "Dispatch": 95,
+    "Delivered": 100,
+};
 
 export default function ProjectDetails() {
     const { id } = useParams();
@@ -121,22 +133,17 @@ export default function ProjectDetails() {
 
                     body: JSON.stringify({
 
-                        project_name:
-                            project.project_name,
+                        project_name: project.project_name,
 
-                        po_number:
-                            project.po_number,
+                        po_number: project.po_number,
 
-                        project_value:
-                            project.project_value,
+                        project_value: project.project_value,
 
                         start_date:
-                            project.start_date
-                                ?.split("T")[0],
+                            project.start_date?.split("T")[0],
 
                         expected_delivery:
-                            project.expected_delivery
-                                ?.split("T")[0],
+                            project.expected_delivery?.split("T")[0],
 
                         status:
                             stages[selectedStage],
@@ -155,15 +162,24 @@ export default function ProjectDetails() {
 
                         dispatch_date:
                             project.dispatch_date
-                                ? project.dispatch_date
-                                    .split("T")[0]
+                                ? project.dispatch_date.split("T")[0]
                                 : null,
 
                         delivery_date:
                             project.delivery_date
-                                ? project.delivery_date
-                                    .split("T")[0]
+                                ? project.delivery_date.split("T")[0]
                                 : null,
+
+                        panel_type:
+                            project.panel_type,
+
+                        project_engineer:
+                            project.project_engineer,
+
+                        completion_percentage:
+                            completionMap[
+                            stages[selectedStage]
+                            ] || 0,
 
                     }),
                 }
@@ -179,8 +195,12 @@ export default function ProjectDetails() {
 
             setProject(updatedProject);
 
-            alert(
-                "Stage Updated"
+            // alert(
+            //     "Stage Updated"
+            // );
+
+            toast.success(
+                "Project stage updated successfully"
             );
 
         } catch (error) {
@@ -307,9 +327,13 @@ export default function ProjectDetails() {
         async () => {
 
             if (!selectedFile) {
-                alert(
+
+                toast.warning(
                     "Please select a file"
                 );
+                // alert(
+                //     "Please select a file"
+                // );
                 return;
             }
 
@@ -348,9 +372,13 @@ export default function ProjectDetails() {
 
                 setSelectedFile(null);
 
-                alert(
-                    "Document Uploaded"
+                toast.success(
+                    "Document uploaded successfully"
                 );
+
+                // alert(
+                //     "Document Uploaded"
+                // );
 
             } catch (error) {
 
@@ -515,6 +543,15 @@ export default function ProjectDetails() {
                             status:
                                 project.status,
 
+                            panel_type:
+                                project.panel_type,
+
+                            project_engineer:
+                                project.project_engineer,
+
+                            completion_percentage:
+                                project.completion_percentage,
+
                             ...dispatchData,
 
                         }),
@@ -539,9 +576,11 @@ export default function ProjectDetails() {
                     false
                 );
 
-                alert(
-                    "Dispatch Updated"
-                );
+                // alert(
+                //     "Dispatch Updated"
+                // );
+
+                toast.success("Dispatch details updated successfully");
 
             } catch (error) {
 
@@ -607,9 +646,11 @@ export default function ProjectDetails() {
 
                 setShowProjectModal(false);
 
-                alert(
-                    "Project Updated"
-                );
+                toast.success("Project updated successfully");
+
+                // alert(
+                //     "Project Updated"
+                // );
 
             } catch (error) {
 
@@ -705,9 +746,13 @@ export default function ProjectDetails() {
 
                 if (!selectedImage) {
 
-                    alert(
-                        "Please select an image"
+                    toast.warning(
+                        "Please choose an image to upload"
                     );
+
+                    // alert(
+                    //     "Please select an image"
+                    // );
 
                     return;
 
@@ -715,9 +760,11 @@ export default function ProjectDetails() {
 
                 if (!caption) {
 
-                    alert(
-                        "Please select a stage"
-                    );
+                    toast.warning("Please select a stage");
+
+                    // alert(
+                    //     "Please select a stage"
+                    // );
 
                     return;
 
@@ -760,9 +807,11 @@ export default function ProjectDetails() {
 
                 await response.json();
 
-                alert(
-                    "Image Uploaded Successfully"
-                );
+                toast.success("Image uploaded successfully");
+
+                // alert(
+                //     "Image Uploaded Successfully"
+                // );
 
                 setShowGalleryModal(
                     false
@@ -780,9 +829,13 @@ export default function ProjectDetails() {
 
                 console.error(error);
 
-                alert(
+                toast.error(
                     "Failed To Upload Image"
-                );
+                )
+
+                // alert(
+                //     "Failed To Upload Image"
+                // );
 
             }
 

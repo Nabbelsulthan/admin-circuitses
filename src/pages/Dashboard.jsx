@@ -105,23 +105,29 @@ export default function Dashboard() {
 
       </div>
 
+
       <div className="recent-section">
 
-        <h2>Recent Activity</h2>
-
+        <h2>Business Overview</h2>
         <div className="activity-card">
-          Customer management system connected to PostgreSQL.
+          🏭 {stats.projects} projects currently tracked through CES Connect.
         </div>
 
         <div className="activity-card">
-          Project tracking module is active.
+          🤝 {stats.customers} customer accounts are active in the portal.
         </div>
 
         <div className="activity-card">
-          Dashboard statistics are live from database.
+          🚚 {stats.dispatchPending} projects are awaiting dispatch.
         </div>
+
+
+
 
       </div>
+
+
+
 
     </div>
   );

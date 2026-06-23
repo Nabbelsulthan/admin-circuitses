@@ -4,6 +4,7 @@
 import { useState, useEffect } from "react";
 import "./Customers.css";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 export default function Customers() {
 
@@ -13,8 +14,8 @@ export default function Customers() {
   const [showModal, setShowModal] = useState(false);
 
   const [newCustomer, setNewCustomer] = useState({
-    company: "",
-    contact: "",
+    company_name: "",
+    contact_person: "",
     email: "",
     phone: "",
     username: "",
@@ -22,28 +23,57 @@ export default function Customers() {
   });
 
   const handleAddCustomer = async () => {
+
     try {
 
-      const response = await fetch(
-        "http://localhost:5001/api/customers",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type":
-              "application/json",
-          },
-          body: JSON.stringify(
-            newCustomer
-          ),
-        }
-      );
+      const checkResponse =
+        await fetch(
+          `http://localhost:5001/api/customers/check-username/${newCustomer.username}`
+        );
 
-      const savedCustomer =
+      const checkData =
+        await checkResponse.json();
+
+      if (checkData.exists) {
+
+        toast.error(
+          "Username already exists"
+        );
+
+        return;
+      }
+
+      const response =
+        await fetch(
+          "http://localhost:5001/api/customers",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type":
+                "application/json",
+            },
+            body: JSON.stringify(
+              newCustomer
+            ),
+          }
+        );
+
+      const data =
         await response.json();
+
+      if (!response.ok) {
+
+        toast.error(
+          data.message ||
+          "Failed to add customer"
+        );
+
+        return;
+      }
 
       setCustomers([
         ...customers,
-        savedCustomer,
+        data,
       ]);
 
       setNewCustomer({
@@ -57,10 +87,78 @@ export default function Customers() {
 
       setShowModal(false);
 
+      toast.success(
+        "Customer added successfully"
+      );
+
     } catch (error) {
+
       console.error(error);
+
+      toast.error(
+        "Failed to add customer"
+      );
+
     }
+
   };
+
+  const handleDeleteCustomer =
+    async (id) => {
+
+      const confirmDelete =
+        window.confirm(
+          "This action cannot be undone. Delete this customer?"
+        );
+
+      if (!confirmDelete)
+        return;
+
+      try {
+
+        const response =
+          await fetch(
+            `http://localhost:5001/api/customers/${id}`,
+            {
+              method: "DELETE",
+            }
+          );
+
+        const data =
+          await response.json();
+
+        if (!response.ok) {
+
+          toast.error(
+            data.message ||
+            "Failed to delete customer"
+          );
+
+          return;
+        }
+
+        setCustomers(
+          customers.filter(
+            (customer) =>
+              customer.id !== id
+          )
+        );
+
+        toast.success(
+          "Customer deleted successfully"
+        );
+
+      } catch (error) {
+
+        console.error(error);
+
+        toast.error(
+          "Failed to delete customer"
+        );
+
+      }
+
+    };
 
   useEffect(() => {
     fetch(
@@ -112,6 +210,7 @@ export default function Customers() {
                 <td>{customer.username}</td>
 
                 <td>
+
                   <button
                     className="view-btn"
                     onClick={() =>
@@ -120,6 +219,18 @@ export default function Customers() {
                   >
                     View
                   </button>
+
+                  <button
+                    className="delete-btn"
+                    onClick={() =>
+                      handleDeleteCustomer(
+                        customer.id
+                      )
+                    }
+                  >
+                    Delete
+                  </button>
+
                 </td>
               </tr>
             ))}
@@ -135,11 +246,11 @@ export default function Customers() {
             <input
               type="text"
               placeholder="Company Name"
-              value={newCustomer.company}
+              value={newCustomer.company_name}
               onChange={(e) =>
                 setNewCustomer({
                   ...newCustomer,
-                  company: e.target.value,
+                  company_name: e.target.value,
                 })
               }
             />
@@ -147,11 +258,11 @@ export default function Customers() {
             <input
               type="text"
               placeholder="Contact Person"
-              value={newCustomer.contact}
+              value={newCustomer.contact_person}
               onChange={(e) =>
                 setNewCustomer({
                   ...newCustomer,
-                  contact: e.target.value,
+                  contact_person: e.target.value,
                 })
               }
             />
@@ -224,123 +335,7 @@ export default function Customers() {
       )}
 
 
-      {showModal && (
-        <div className="modal-overlay">
 
-          <div className="project-modal">
-
-            <h2>Add Customer</h2>
-
-            <input
-              type="text"
-              placeholder="Company Name"
-              value={
-                newCustomer.company_name
-              }
-              onChange={(e) =>
-                setNewCustomer({
-                  ...newCustomer,
-                  company_name:
-                    e.target.value,
-                })
-              }
-            />
-
-            <input
-              type="text"
-              placeholder="Contact Person"
-              value={
-                newCustomer.contact_person
-              }
-              onChange={(e) =>
-                setNewCustomer({
-                  ...newCustomer,
-                  contact_person:
-                    e.target.value,
-                })
-              }
-            />
-
-            <input
-              type="email"
-              placeholder="Email"
-              value={newCustomer.email}
-              onChange={(e) =>
-                setNewCustomer({
-                  ...newCustomer,
-                  email: e.target.value,
-                })
-              }
-            />
-
-            <input
-              type="text"
-              placeholder="Phone"
-              value={newCustomer.phone}
-              onChange={(e) =>
-                setNewCustomer({
-                  ...newCustomer,
-                  phone: e.target.value,
-                })
-              }
-            />
-
-            <input
-              type="text"
-              placeholder="Username"
-              value={
-                newCustomer.username
-              }
-              onChange={(e) =>
-                setNewCustomer({
-                  ...newCustomer,
-                  username:
-                    e.target.value,
-                })
-              }
-            />
-
-            <input
-              type="password"
-              placeholder="Password"
-              value={
-                newCustomer.password
-              }
-              onChange={(e) =>
-                setNewCustomer({
-                  ...newCustomer,
-                  password:
-                    e.target.value,
-                })
-              }
-            />
-
-            <div className="modal-actions">
-
-              <button
-                className="cancel-btn"
-                onClick={() =>
-                  setShowModal(false)
-                }
-              >
-                Cancel
-              </button>
-
-              <button
-                className="save-btn"
-                onClick={
-                  handleAddCustomer
-                }
-              >
-                Save Customer
-              </button>
-
-            </div>
-
-          </div>
-
-        </div>
-      )}
 
     </div>
   );

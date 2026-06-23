@@ -8,6 +8,7 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import VisibilityOffOutlinedIcon from "@mui/icons-material/VisibilityOffOutlined";
 import logo from "../assets/logo1.png";
+import { toast } from "react-toastify";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -52,7 +53,7 @@ export default function Login() {
 
               body:
                 JSON.stringify({
-                  username : email,
+                  username: email,
                   password,
                 }),
             }
@@ -76,9 +77,13 @@ export default function Login() {
 
         } else {
 
-          alert(
-            data.message
+          toast.error(
+            data.message || "Invalid username or password"
           );
+
+          // alert(
+          //   data.message
+          // );
 
         }
 
@@ -195,6 +200,9 @@ export default function Login() {
           </div>
         </form>
       </div>
+
+
+
     </div>
   );
 }
