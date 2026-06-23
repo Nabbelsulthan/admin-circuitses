@@ -160,6 +160,9 @@ export default function Customers() {
 
     };
 
+
+    
+
   useEffect(() => {
     fetch(
       "http://localhost:5001/api/customers"
