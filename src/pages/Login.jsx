@@ -9,6 +9,7 @@ import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import VisibilityOffOutlinedIcon from "@mui/icons-material/VisibilityOffOutlined";
 import logo from "../assets/logo1.png";
 import { toast } from "react-toastify";
+import { API_URL } from "../config";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -42,7 +43,7 @@ export default function Login() {
 
         const response =
           await fetch(
-            "http://localhost:5001/api/auth/login",
+            `${API_URL}/api/auth/login`,
             {
               method: "POST",
 

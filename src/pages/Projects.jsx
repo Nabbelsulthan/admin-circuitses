@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import "./Projects.css";
 import { useNavigate } from "react-router-dom";
+import { API_URL } from "../config";
 
 export default function Projects() {
   const navigate = useNavigate();
@@ -24,7 +25,7 @@ export default function Projects() {
 
   const loadProjects = () => {
     fetch(
-      "http://localhost:5001/api/projects"
+      `${API_URL}/api/projects`
     )
       .then((res) => res.json())
       .then((data) => {
@@ -54,7 +55,7 @@ export default function Projects() {
   const handleAddProject = async () => {
     try {
       const response = await fetch(
-        "http://localhost:5001/api/projects",
+        `${API_URL}/api/projects`,
         {
           method: "POST",
           headers: {
@@ -121,7 +122,7 @@ export default function Projects() {
   useEffect(() => {
 
     fetch(
-      "http://localhost:5001/api/customers"
+      `${API_URL}/api/customers`
     )
       .then((res) => res.json())
       .then((data) => {
@@ -146,7 +147,7 @@ export default function Projects() {
       try {
 
         await fetch(
-          `http://localhost:5001/api/projects/${id}`,
+          `${API_URL}/api/projects/${id}`,
           {
             method: "DELETE",
           }

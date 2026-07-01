@@ -2,6 +2,7 @@
 import "./Dashboard.css";
 import { useNavigate, Navigate } from "react-router-dom";
 import { useState, useEffect } from "react";
+import { API_URL } from "../config";
 
 export default function Dashboard() {
   const navigate = useNavigate();
@@ -15,7 +16,7 @@ export default function Dashboard() {
   useEffect(() => {
 
     fetch(
-      "http://localhost:5001/api/dashboard/stats"
+      `${API_URL}/api/dashboard/stats`
     )
       .then((res) => res.json())
       .then((data) => {
@@ -40,8 +41,6 @@ export default function Dashboard() {
   if (!stats) {
     return <h2>Loading...</h2>;
   }
-
-
 
 
   return (

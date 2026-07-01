@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 import "./Customers.css";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { API_URL } from "../config";
 
 export default function Customers() {
 
@@ -28,7 +29,7 @@ export default function Customers() {
 
       const checkResponse =
         await fetch(
-          `http://localhost:5001/api/customers/check-username/${newCustomer.username}`
+          `${API_URL}/api/customers/check-username/${newCustomer.username}`
         );
 
       const checkData =
@@ -45,7 +46,7 @@ export default function Customers() {
 
       const response =
         await fetch(
-          "http://localhost:5001/api/customers",
+          `${API_URL}/api/customers`,
           {
             method: "POST",
             headers: {
@@ -118,7 +119,7 @@ export default function Customers() {
 
         const response =
           await fetch(
-            `http://localhost:5001/api/customers/${id}`,
+            `${API_URL}/api/customers/${id}`,
             {
               method: "DELETE",
             }
@@ -165,7 +166,7 @@ export default function Customers() {
 
   useEffect(() => {
     fetch(
-      "http://localhost:5001/api/customers"
+      `${API_URL}/api/customers`
     )
       .then((res) => res.json())
       .then((data) => {

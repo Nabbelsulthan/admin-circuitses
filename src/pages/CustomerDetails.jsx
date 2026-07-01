@@ -1,4 +1,5 @@
 import "./CustomerDetails.css";
+import { API_URL } from "../config";
 import { useParams, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
@@ -46,7 +47,7 @@ export default function CustomerDetails() {
   useEffect(() => {
 
     fetch(
-      `http://localhost:5001/api/customers/${id}`
+      `${API_URL}/api/customers/${id}`
     )
       .then((res) => res.json())
       .then((data) => {
@@ -54,7 +55,7 @@ export default function CustomerDetails() {
       });
 
     fetch(
-      `http://localhost:5001/api/customers/${id}/projects`
+      `${API_URL}/api/customers/${id}/projects`
     )
       .then((res) => res.json())
       .then((data) => {
@@ -62,7 +63,7 @@ export default function CustomerDetails() {
       });
 
     fetch(
-      `http://localhost:5001/api/customers/${id}/stats`
+      `${API_URL}/api/customers/${id}/stats`
     )
       .then((res) => res.json())
       .then((data) => {
@@ -91,7 +92,7 @@ export default function CustomerDetails() {
 
         const response =
           await fetch(
-            `http://localhost:5001/api/customers/${id}`,
+            `${API_URL}/api/customers/${id}`,
             {
               method: "PUT",
               headers: {
@@ -141,7 +142,7 @@ export default function CustomerDetails() {
       try {
 
         await fetch(
-          `http://localhost:5001/api/customers/${id}/reset-password`,
+          `${API_URL}/api/customers/${id}/reset-password`,
           {
             method: "PUT",
             headers: {

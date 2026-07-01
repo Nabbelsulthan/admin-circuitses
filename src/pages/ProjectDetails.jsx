@@ -3,6 +3,7 @@ import "./ProjectDetails.css";
 import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
+import { API_URL } from "../config";
 
 
 const stages = [
@@ -122,7 +123,7 @@ export default function ProjectDetails() {
         try {
 
             await fetch(
-                `http://localhost:5001/api/projects/${id}`,
+                `${API_URL}/api/projects/${id}`,
                 {
                     method: "PUT",
 
@@ -187,7 +188,7 @@ export default function ProjectDetails() {
 
             const response =
                 await fetch(
-                    `http://localhost:5001/api/projects/${id}`
+                    `${API_URL}/api/projects/${id}`
                 );
 
             const updatedProject =
@@ -215,7 +216,7 @@ export default function ProjectDetails() {
     useEffect(() => {
 
         fetch(
-            `http://localhost:5001/api/projects/${id}`
+            `${API_URL}/api/projects/${id}`
         )
             .then((res) => res.json())
             .then((data) => {
@@ -246,7 +247,7 @@ export default function ProjectDetails() {
             });
 
         fetch(
-            `http://localhost:5001/api/documents/${id}`
+            `${API_URL}/api/documents/${id}`
         )
             .then((res) => res.json())
             .then((data) => {
@@ -255,7 +256,7 @@ export default function ProjectDetails() {
 
 
         fetch(
-            `http://localhost:5001/api/updates/${id}`
+            `${API_URL}/api/updates/${id}`
         )
             .then((res) => res.json())
             .then((data) => {
@@ -264,7 +265,7 @@ export default function ProjectDetails() {
 
 
         fetch(
-            `http://localhost:5001/api/fat-reports/${id}`
+            `${API_URL}/api/fat-reports/${id}`
         )
             .then((res) => res.json())
             .then((data) => {
@@ -279,7 +280,7 @@ export default function ProjectDetails() {
             });
 
         fetch(
-            `http://localhost:5001/api/gallery/${id}`
+            `${API_URL}/api/gallery/${id}`
         )
             .then((res) => res.json())
             .then((data) => {
@@ -306,7 +307,7 @@ export default function ProjectDetails() {
         if (!project) return;
 
         fetch(
-            `http://localhost:5001/api/customers/${project.customer_id}`
+            `${API_URL}/api/customers/${project.customer_id}`
         )
             .then((res) => res.json())
             .then((data) => {
@@ -353,7 +354,7 @@ export default function ProjectDetails() {
             try {
 
                 await fetch(
-                    "http://localhost:5001/api/documents",
+                    `${API_URL}/api/documents`,
                     {
                         method: "POST",
                         body: formData,
@@ -362,7 +363,7 @@ export default function ProjectDetails() {
 
                 const response =
                     await fetch(
-                        `http://localhost:5001/api/documents/${id}`
+                        `${API_URL}/api/documents/${id}`
                     );
 
                 const docs =
@@ -402,7 +403,7 @@ export default function ProjectDetails() {
             try {
 
                 await fetch(
-                    `http://localhost:5001/api/documents/${documentId}`,
+                    `${API_URL}/api/documents/${documentId}`,
                     {
                         method: "DELETE",
                     }
@@ -410,7 +411,7 @@ export default function ProjectDetails() {
 
                 const response =
                     await fetch(
-                        `http://localhost:5001/api/documents/${id}`
+                        `${API_URL}/api/documents/${id}`
                     );
 
                 const docs =
@@ -437,7 +438,7 @@ export default function ProjectDetails() {
             try {
 
                 await fetch(
-                    "http://localhost:5001/api/updates",
+                    `${API_URL}/api/updates`,
                     {
                         method: "POST",
                         headers: {
@@ -453,7 +454,7 @@ export default function ProjectDetails() {
 
                 const response =
                     await fetch(
-                        `http://localhost:5001/api/updates/${id}`
+                        `${API_URL}/api/updates/${id}`
                     );
 
                 const data =
@@ -478,7 +479,7 @@ export default function ProjectDetails() {
             try {
 
                 await fetch(
-                    `http://localhost:5001/api/updates/${updateId}`,
+                    `${API_URL}/api/updates/${updateId}`,
                     {
                         method: "DELETE",
                     }
@@ -486,7 +487,7 @@ export default function ProjectDetails() {
 
                 const response =
                     await fetch(
-                        `http://localhost:5001/api/updates/${id}`
+                        `${API_URL}/api/updates/${id}`
                     );
 
                 const data =
@@ -508,7 +509,7 @@ export default function ProjectDetails() {
             try {
 
                 await fetch(
-                    `http://localhost:5001/api/projects/${id}`,
+                    `${API_URL}/api/projects/${id}`,
                     {
                         method: "PUT",
 
@@ -560,7 +561,7 @@ export default function ProjectDetails() {
 
                 const response =
                     await fetch(
-                        `http://localhost:5001/api/projects/${id}`
+                        `${API_URL}/api/projects/${id}`
                     );
 
                 const updatedProject =
@@ -599,7 +600,7 @@ export default function ProjectDetails() {
 
                 const response =
                     await fetch(
-                        `http://localhost:5001/api/projects/${id}`,
+                        `${API_URL}/api/projects/${id}`,
                         {
                             method: "PUT",
 
@@ -636,7 +637,7 @@ export default function ProjectDetails() {
 
                 const refreshedResponse =
                     await fetch(
-                        `http://localhost:5001/api/projects/${id}`
+                        `${API_URL}/api/projects/${id}`
                     );
 
                 const refreshedProject =
@@ -683,7 +684,7 @@ export default function ProjectDetails() {
             try {
 
                 await fetch(
-                    "http://localhost:5001/api/fat-reports",
+                    `${API_URL}/api/fat-reports`,
                     {
                         method: "POST",
                         body: formData,
@@ -692,7 +693,7 @@ export default function ProjectDetails() {
 
                 const response =
                     await fetch(
-                        `http://localhost:5001/api/fat-reports/${id}`
+                        `${API_URL}/api/fat-reports/${id}`
                     );
 
                 const data =
@@ -724,7 +725,7 @@ export default function ProjectDetails() {
         async (reportId) => {
 
             await fetch(
-                `http://localhost:5001/api/fat-reports/${reportId}`,
+                `${API_URL}/api/fat-reports/${reportId}`,
                 {
                     method: "DELETE",
                 }
@@ -790,7 +791,7 @@ export default function ProjectDetails() {
 
                 const response =
                     await fetch(
-                        "http://localhost:5001/api/gallery",
+                        `${API_URL}/api/gallery`,
                         {
                             method: "POST",
                             body: formData,
@@ -846,7 +847,7 @@ export default function ProjectDetails() {
 
             const response =
                 await fetch(
-                    `http://localhost:5001/api/gallery/${id}`
+                    `${API_URL}/api/gallery/${id}`
                 );
 
             const data =
@@ -870,7 +871,7 @@ export default function ProjectDetails() {
             try {
 
                 await fetch(
-                    `http://localhost:5001/api/gallery/${imageId}`,
+                    `${API_URL}/api/gallery/${imageId}`,
                     {
                         method: "DELETE",
                     }
@@ -1226,10 +1227,10 @@ export default function ProjectDetails() {
                             <div className="document-actions">
 
                                 <a
-                                    href={`http://localhost:5001/${doc.file_path}`}
+                                    href={`${API_URL}/${doc.file_path}`}
                                     target="_blank"
                                     rel="noreferrer"
-                                    className="download-btn"
+                                    className="mini-btn"
                                 >
                                     Download
                                 </a>
@@ -1355,7 +1356,7 @@ export default function ProjectDetails() {
                             <div>
 
                                 <a
-                                    href={`http://localhost:5001/${report.file_path}`}
+                                    href={`${API_URL}/${report.file_path}`}
                                     target="_blank"
                                     rel="noreferrer"
                                     className="mini-btn"
@@ -1437,15 +1438,13 @@ export default function ProjectDetails() {
                             >
 
                                 <img
-                                    src={`http://localhost:5001/${image.image_path}`}
+                                    src={`${API_URL}/${image.image_path}`}
                                     alt={image.caption}
                                     className="gallery-preview"
                                     onClick={() =>
-                                        setPreviewImage(
-                                            `http://localhost:5001/${image.image_path}`
-                                        )
+                                        setPreviewImage(`${API_URL}/${image.image_path}`)
                                     }
-                                />
+                                />ƒ
 
                                 <p>
                                     {image.caption}
