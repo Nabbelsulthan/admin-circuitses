@@ -1443,9 +1443,9 @@ export default function ProjectDetails() {
                                     alt={image.caption}
                                     className="gallery-preview"
                                     onClick={() =>
-                                        setPreviewImage(`${STORAGE_URL}/${image.image_path}`)
+                                        setPreviewImage(`${STORAGE_URL}/gallery/${image.image_path}`)
                                     }
-                                />ƒ
+                                />
 
                                 <p>
                                     {image.caption}
