@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import { API_URL } from "../config";
+import { STORAGE_URL } from "../config/storage";
 
 
 const stages = [
@@ -1227,7 +1228,7 @@ export default function ProjectDetails() {
                             <div className="document-actions">
 
                                 <a
-                                    href={`${API_URL}/${doc.file_path}`}
+                                  href={`${STORAGE_URL}/documents/${doc.file_path}`}
                                     target="_blank"
                                     rel="noreferrer"
                                     className="mini-btn"
@@ -1356,7 +1357,7 @@ export default function ProjectDetails() {
                             <div>
 
                                 <a
-                                    href={`${API_URL}/${report.file_path}`}
+                                    href={`${STORAGE_URL}/fat-reports/${report.file_path}`}
                                     target="_blank"
                                     rel="noreferrer"
                                     className="mini-btn"
@@ -1438,11 +1439,11 @@ export default function ProjectDetails() {
                             >
 
                                 <img
-                                    src={`${API_URL}/${image.image_path}`}
+                                    src={`${STORAGE_URL}/gallery/${image.image_path}`}
                                     alt={image.caption}
                                     className="gallery-preview"
                                     onClick={() =>
-                                        setPreviewImage(`${API_URL}/${image.image_path}`)
+                                        setPreviewImage(`${STORAGE_URL}/${image.image_path}`)
                                     }
                                 />ƒ
 
