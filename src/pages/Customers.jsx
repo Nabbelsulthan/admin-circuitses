@@ -6,6 +6,7 @@ import "./Customers.css";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { API_URL } from "../config";
+import SkeletonLoader from "../components/SkeletonLoader";
 
 export default function Customers() {
 
@@ -13,7 +14,19 @@ export default function Customers() {
   const [customers, setCustomers] = useState([]);
 
   const [showModal, setShowModal] = useState(false);
+  const [loading, setLoading] = useState(true);
 
+  const [savingCustomer, setSavingCustomer] =
+    useState(false);
+
+  const [showDeleteCustomerModal, setShowDeleteCustomerModal] =
+    useState(false);
+
+  const [customerToDelete, setCustomerToDelete] =
+    useState(null);
+
+  const [deletingCustomer, setDeletingCustomer] =
+    useState(false);
   const [newCustomer, setNewCustomer] = useState({
     company_name: "",
     contact_person: "",
@@ -24,6 +37,50 @@ export default function Customers() {
   });
 
   const handleAddCustomer = async () => {
+
+    const {
+      company_name,
+      contact_person,
+      email,
+      phone,
+      username,
+      password,
+    } = newCustomer;
+
+    if (
+      !company_name.trim() ||
+      !contact_person.trim() ||
+      !email.trim() ||
+      !phone.trim() ||
+      !username.trim() ||
+      !password.trim()
+    ) {
+      toast.warning("Please fill in all fields.");
+      return;
+    }
+
+    const emailRegex =
+      /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!emailRegex.test(email)) {
+      toast.warning("Please enter a valid email address.");
+      return;
+    }
+
+    const phoneRegex =
+      /^[0-9]{10}$/;
+
+    if (!phoneRegex.test(phone)) {
+      toast.warning("Phone number must contain exactly 10 digits.");
+      return;
+    }
+
+    if (password.length < 6) {
+      toast.warning("Password must be at least 6 characters.");
+      return;
+    }
+
+    setSavingCustomer(true);
 
     try {
 
@@ -100,6 +157,10 @@ export default function Customers() {
         "Failed to add customer"
       );
 
+    } finally {
+
+      setSavingCustomer(false);
+
     }
 
   };
@@ -107,13 +168,7 @@ export default function Customers() {
   const handleDeleteCustomer =
     async (id) => {
 
-      const confirmDelete =
-        window.confirm(
-          "This action cannot be undone. Delete this customer?"
-        );
-
-      if (!confirmDelete)
-        return;
+      setDeletingCustomer(true);
 
       try {
 
@@ -136,6 +191,7 @@ export default function Customers() {
           );
 
           return;
+
         }
 
         setCustomers(
@@ -144,6 +200,10 @@ export default function Customers() {
               customer.id !== id
           )
         );
+
+        setShowDeleteCustomerModal(false);
+
+        setCustomerToDelete(null);
 
         toast.success(
           "Customer deleted successfully"
@@ -157,14 +217,19 @@ export default function Customers() {
           "Failed to delete customer"
         );
 
+      } finally {
+
+        setDeletingCustomer(false);
+
       }
 
     };
 
 
-    
+
 
   useEffect(() => {
+    setLoading(true);
     fetch(
       `${API_URL}/api/customers`
     )
@@ -172,8 +237,16 @@ export default function Customers() {
       .then((data) => {
         setCustomers(data);
       })
-      .catch(console.error);
+      .catch(console.error)
+      .finally(() => {
+        setLoading(false);
+      });
   }, []);
+
+
+  if (loading) {
+    return <SkeletonLoader />;
+}
 
   return (
     <div className="customers-page">
@@ -205,42 +278,101 @@ export default function Customers() {
           </thead>
 
           <tbody>
-            {customers.map((customer) => (
-              <tr key={customer.id}>
-                <td>{customer.company_name}</td>
-                <td>{customer.contact_person}</td>
-                <td>{customer.email}</td>
-                <td>{customer.phone}</td>
-                <td>{customer.username}</td>
 
-                <td>
 
-                  <button
-                    className="view-btn"
-                    onClick={() =>
-                      navigate(`/customers/${customer.id}`)
-                    }
-                  >
-                    View
-                  </button>
+        
+            {  customers.map((customer) => (
+                <tr key={customer.id}>
+                  <td>{customer.company_name}</td>
+                  <td>{customer.contact_person}</td>
+                  <td>{customer.email}</td>
+                  <td>{customer.phone}</td>
+                  <td>{customer.username}</td>
 
-                  <button
-                    className="delete-btn"
-                    onClick={() =>
-                      handleDeleteCustomer(
-                        customer.id
-                      )
-                    }
-                  >
-                    Delete
-                  </button>
+                  <td>
 
-                </td>
-              </tr>
-            ))}
+                    <button
+                      className="view-btn"
+                      onClick={() =>
+                        navigate(`/customers/${customer.id}`)
+                      }
+                    >
+                      View
+                    </button>
+
+                    <button
+                      className="delete-btn"
+                      onClick={() => {
+
+                        setCustomerToDelete(customer.id);
+
+                        setShowDeleteCustomerModal(true);
+
+                      }}
+                    >
+                      Delete
+                    </button>
+
+                  </td>
+                </tr>
+              )
+            )}
           </tbody>
         </table>
       </div>
+
+
+      {showDeleteCustomerModal && (
+
+        <div className="modal-overlay">
+
+          <div className="project-modal">
+
+            <h2>Delete Customer</h2>
+
+            <p className="delete-message">
+              Are you sure you want to delete this customer?
+              <br />
+              <span>This action cannot be undone.</span>
+            </p>
+
+            <div className="modal-actions">
+
+              <button
+                className="cancel-btn"
+                onClick={() =>
+                  setShowDeleteCustomerModal(false)
+                }
+              >
+                Cancel
+              </button>
+
+              <button
+                className="delete-btn"
+                disabled={deletingCustomer}
+                onClick={() =>
+                  handleDeleteCustomer(
+                    customerToDelete
+                  )
+                }
+              >
+                {deletingCustomer ? (
+                  <>
+                    <span className="button-spinner"></span>
+                    Deleting...
+                  </>
+                ) : (
+                  "Delete"
+                )}
+              </button>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      )}
 
       {showModal && (
         <div className="modal-overlay">
@@ -330,8 +462,16 @@ export default function Customers() {
               <button
                 className="save-btn"
                 onClick={handleAddCustomer}
+                disabled={savingCustomer}
               >
-                Save Customer
+                {savingCustomer ? (
+                  <>
+                    <span className="button-spinner"></span>
+                    Saving...
+                  </>
+                ) : (
+                  "Save Customer"
+                )}
               </button>
             </div>
           </div>

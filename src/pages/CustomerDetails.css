@@ -41,7 +41,7 @@
   background: white;
   padding: 20px;
   border-radius: 18px;
-  box-shadow: 0 10px 25px rgba(0,0,0,.05);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, .05);
 }
 
 .summary-card h4 {
@@ -60,7 +60,7 @@
 
 .details-grid {
   display: grid;
-  grid-template-columns: repeat(2,1fr);
+  grid-template-columns: repeat(2, 1fr);
   gap: 20px;
   margin-bottom: 25px;
 }
@@ -69,7 +69,7 @@
   background: white;
   border-radius: 18px;
   padding: 25px;
-  box-shadow: 0 10px 25px rgba(0,0,0,.05);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, .05);
 }
 
 .card-header {
@@ -142,7 +142,7 @@
 .modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,.4);
+  background: rgba(0, 0, 0, .4);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -167,4 +167,50 @@
   display: flex;
   justify-content: flex-end;
   gap: 12px;
+}
+
+.password-input-container {
+
+  position: relative;
+
+}
+
+.password-input-container input {
+
+  width: 100%;
+
+  padding-right: 50px;
+
+  box-sizing: border-box;
+
+}
+
+.toggle-password-btn {
+
+  position: absolute;
+
+  top: 50%;
+
+  right: 15px;
+
+  transform: translateY(-50%);
+
+  border: none;
+
+  background: transparent;
+
+  cursor: pointer;
+
+  font-size: 18px;
+
+  color: #666;
+
+  padding: 0;
+
+}
+
+.toggle-password-btn:hover {
+
+  color: #111;
+
 }

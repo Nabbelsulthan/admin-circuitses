@@ -3,6 +3,8 @@ import { API_URL } from "../config";
 import { useParams, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
+import SkeletonLoader from "../components/SkeletonLoader";
+
 
 export default function CustomerDetails() {
 
@@ -14,6 +16,15 @@ export default function CustomerDetails() {
     useState(null);
 
   const [showEditModal, setShowEditModal] =
+    useState(false);
+
+  const [savingCustomer, setSavingCustomer] =
+    useState(false);
+
+  const [resettingPassword, setResettingPassword] =
+    useState(false);
+
+  const [showPassword, setShowPassword] =
     useState(false);
 
   const [editCustomer, setEditCustomer] =
@@ -81,12 +92,60 @@ export default function CustomerDetails() {
   }, [id]);
 
   if (!customer) {
-    return <h2>Loading...</h2>;
+    return <SkeletonLoader />;
   }
 
 
   const handleUpdateCustomer =
     async () => {
+
+      const {
+        company_name,
+        contact_person,
+        email,
+        phone,
+        username,
+      } = editCustomer;
+
+      if (
+        !company_name.trim() ||
+        !contact_person.trim() ||
+        !email.trim() ||
+        !phone.trim() ||
+        !username.trim()
+      ) {
+
+        toast.warning("Please fill all fields.");
+
+        return;
+
+      }
+
+      const emailRegex =
+        /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+      if (!emailRegex.test(email)) {
+
+        toast.warning("Please enter a valid email.");
+
+        return;
+
+      }
+
+      const phoneRegex =
+        /^[0-9]{10}$/;
+
+      if (!phoneRegex.test(phone)) {
+
+        toast.warning(
+          "Phone number must contain exactly 10 digits."
+        );
+
+        return;
+
+      }
+
+      setSavingCustomer(true);
 
       try {
 
@@ -123,6 +182,10 @@ export default function CustomerDetails() {
 
         console.error(error);
 
+      } finally {
+
+        setSavingCustomer(false);
+
       }
     };
 
@@ -130,14 +193,27 @@ export default function CustomerDetails() {
   const handleResetPassword =
     async () => {
 
-      if (!newPassword) {
+      if (!newPassword.trim()) {
 
         toast.warning(
           "Please enter a password"
         );
 
         return;
+
       }
+
+      if (newPassword.length < 6) {
+
+        toast.warning(
+          "Password must be at least 6 characters."
+        );
+
+        return;
+
+      }
+
+      setResettingPassword(true);
 
       try {
 
@@ -173,6 +249,10 @@ export default function CustomerDetails() {
         toast.error(
           "Failed to reset password"
         );
+
+      } finally {
+
+        setResettingPassword(false);
 
       }
 
@@ -299,37 +379,53 @@ export default function CustomerDetails() {
           <h3>Assigned Projects</h3>
         </div>
 
-        {projects.map((project) => (
+        {projects.length === 0 ? (
 
-
-
-          <div
-            key={project.id}
-            className="project-item"
+          <p
+            style={{
+              textAlign: "center",
+              color: "#888",
+              padding: "25px",
+            }}
           >
-            <div>
-              <strong>
-                {project.project_name}
-              </strong>
+            No projects assigned yet.
+          </p>
 
-              <p>
-                {project.status}
-              </p>
+        ) : (
+
+          projects.map((project) => (
+
+
+
+            <div
+              key={project.id}
+              className="project-item"
+            >
+              <div>
+                <strong>
+                  {project.project_name}
+                </strong>
+
+                <p>
+                  {project.status}
+                </p>
+              </div>
+
+              <button
+                className="view-btn"
+                onClick={() =>
+                  navigate(
+                    `/projects/${project.id}`
+                  )
+                }
+              >
+                View
+              </button>
             </div>
 
-            <button
-              className="view-btn"
-              onClick={() =>
-                navigate(
-                  `/projects/${project.id}`
-                )
-              }
-            >
-              View
-            </button>
-          </div>
+          ))
 
-        ))}
+        )}
 
       </div>
 
@@ -431,11 +527,17 @@ export default function CustomerDetails() {
 
               <button
                 className="save-btn"
-                onClick={
-                  handleUpdateCustomer
-                }
+                onClick={handleUpdateCustomer}
+                disabled={savingCustomer}
               >
-                Save Changes
+                {savingCustomer ? (
+                  <>
+                    <span className="button-spinner"></span>
+                    Saving...
+                  </>
+                ) : (
+                  "Save Changes"
+                )}
               </button>
 
             </div>
@@ -456,7 +558,7 @@ export default function CustomerDetails() {
             <h2>
               Reset Password
             </h2>
-
+            {/* 
             <input
               type="password"
               placeholder="New Password"
@@ -466,7 +568,30 @@ export default function CustomerDetails() {
                   e.target.value
                 )
               }
-            />
+            /> */}
+
+            <div className="password-input-container">
+
+              <input
+                type={showPassword ? "text" : "password"}
+                placeholder="New Password"
+                value={newPassword}
+                onChange={(e) =>
+                  setNewPassword(e.target.value)
+                }
+              />
+
+              <button
+                type="button"
+                className="toggle-password-btn"
+                onClick={() =>
+                  setShowPassword(!showPassword)
+                }
+              >
+                {showPassword ? "🙈" : "👁️"}
+              </button>
+
+            </div>
 
             <div className="modal-actions">
 
@@ -483,11 +608,17 @@ export default function CustomerDetails() {
 
               <button
                 className="save-btn"
-                onClick={
-                  handleResetPassword
-                }
+                onClick={handleResetPassword}
+                disabled={resettingPassword}
               >
-                Reset Password
+                {resettingPassword ? (
+                  <>
+                    <span className="button-spinner"></span>
+                    Resetting...
+                  </>
+                ) : (
+                  "Reset Password"
+                )}
               </button>
 
             </div>

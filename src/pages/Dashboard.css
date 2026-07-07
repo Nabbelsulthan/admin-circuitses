@@ -91,6 +91,9 @@
 }
 
 
+
+
+
 /* recent activiy */
 
 
@@ -99,7 +102,7 @@
   padding: 18px 22px;
   margin-bottom: 15px;
   border-radius: 16px;
-  box-shadow: 0 5px 15px rgba(0,0,0,.05);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, .05);
   transition: .3s;
 }
 

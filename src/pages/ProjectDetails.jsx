@@ -5,6 +5,12 @@ import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import { API_URL } from "../config";
 import { STORAGE_URL } from "../config/storage";
+import SkeletonLoader from "../components/SkeletonLoader";
+
+
+// saving 
+
+
 
 
 const stages = [
@@ -45,6 +51,8 @@ export default function ProjectDetails() {
     const [showProjectModal, setShowProjectModal] =
         useState(false);
 
+    const [showDocumentModal, setShowDocumentModal] = useState(false);
+
 
     const [documents, setDocuments] =
         useState([]);
@@ -60,6 +68,26 @@ export default function ProjectDetails() {
         useState("");
 
     const [showDispatchModal, setShowDispatchModal] =
+        useState(false);
+
+    const [saving, setSaving] = useState(false);
+
+    const [updatingStage, setUpdatingStage] = useState(false);
+
+    const [savingDispatch, setSavingDispatch] = useState(false);
+
+    const [uploadingDocument, setUploadingDocument] = useState(false);
+
+    const [uploadingFat, setUploadingFat] =
+        useState(false);
+
+    const [showDeleteFatModal, setShowDeleteFatModal] =
+        useState(false);
+
+    const [fatReportToDelete, setFatReportToDelete] =
+        useState(null);
+
+    const [deletingFat, setDeletingFat] =
         useState(false);
 
     const [dispatchData, setDispatchData] =
@@ -117,10 +145,36 @@ export default function ProjectDetails() {
     const [gallery, setGallery] =
         useState([]);
 
+    const [uploadingImage, setUploadingImage] =
+        useState(false);
 
+    const [showDeleteImageModal, setShowDeleteImageModal] =
+        useState(false);
+
+    const [imageToDelete, setImageToDelete] =
+        useState(null);
+
+    const [deletingImage, setDeletingImage] =
+        useState(false);
+
+    // document delete
+
+    const [showDeleteDocumentModal, setShowDeleteDocumentModal] =
+        useState(false);
+
+    const [documentToDelete, setDocumentToDelete] =
+        useState(null);
+
+    const [deletingDocument, setDeletingDocument] =
+        useState(false);
+
+
+
+
+    // update stage
 
     const handleUpdateStage = async () => {
-
+        setUpdatingStage(true);
         try {
 
             await fetch(
@@ -197,9 +251,6 @@ export default function ProjectDetails() {
 
             setProject(updatedProject);
 
-            // alert(
-            //     "Stage Updated"
-            // );
 
             toast.success(
                 "Project stage updated successfully"
@@ -208,6 +259,10 @@ export default function ProjectDetails() {
         } catch (error) {
 
             console.error(error);
+
+        } finally {
+
+            setUpdatingStage(false);
 
         }
 
@@ -320,8 +375,12 @@ export default function ProjectDetails() {
 
     }, [project]);
 
+
+    // skeleton changes
+
     if (!project || !customer) {
-        return <h2>Loading...</h2>;
+
+        return <SkeletonLoader type="dashboard" />
     }
 
 
@@ -333,11 +392,11 @@ export default function ProjectDetails() {
                 toast.warning(
                     "Please select a file"
                 );
-                // alert(
-                //     "Please select a file"
-                // );
+
                 return;
             }
+
+            setUploadingDocument(true);
 
             const formData =
                 new FormData();
@@ -374,32 +433,34 @@ export default function ProjectDetails() {
 
                 setSelectedFile(null);
 
+                setShowDocumentModal(false);
+
                 toast.success(
                     "Document uploaded successfully"
                 );
 
-                // alert(
-                //     "Document Uploaded"
-                // );
+
 
             } catch (error) {
 
                 console.error(error);
 
+            } finally {
+
+                setUploadingDocument(false);
+
             }
 
+
         };
+
+
+
 
     const handleDeleteDocument =
         async (documentId) => {
 
-            const confirmDelete =
-                window.confirm(
-                    "Delete this document?"
-                );
-
-            if (!confirmDelete)
-                return;
+            setDeletingDocument(true);
 
             try {
 
@@ -424,7 +485,16 @@ export default function ProjectDetails() {
 
                 console.error(error);
 
+            } finally {
+
+                setDeletingDocument(false);
+
             }
+
+            setShowDeleteDocumentModal(false);
+
+            setDocumentToDelete(null);
+
 
         };
 
@@ -504,8 +574,12 @@ export default function ProjectDetails() {
 
         };
 
+    // handle dispatch save
+
     const handleSaveDispatch =
         async () => {
+
+            setSavingDispatch(true);
 
             try {
 
@@ -578,9 +652,6 @@ export default function ProjectDetails() {
                     false
                 );
 
-                // alert(
-                //     "Dispatch Updated"
-                // );
 
                 toast.success("Dispatch details updated successfully");
 
@@ -588,86 +659,225 @@ export default function ProjectDetails() {
 
                 console.error(error);
 
+            } finally {
+
+                setSavingDispatch(false);
+
             }
 
         };
 
 
+    // saving
 
-    const handleSaveProject =
-        async () => {
+    const handleSaveProject = async () => {
+
+        setSaving(true);
+
+        try {
+
+            const response =
+                await fetch(
+                    `${API_URL}/api/projects/${id}`,
+                    {
+                        method: "PUT",
+
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+
+                        body: JSON.stringify({
+                            ...project,
+                            ...editProject,
+
+                            project_value:
+                                (
+                                    editProject.project_value ??
+                                    project.project_value
+                                )
+                                    ?.toString()
+                                    .replace(/,/g, ""),
+
+                            start_date:
+                                editProject.start_date ||
+                                project.start_date ||
+                                null,
+
+                            expected_delivery:
+                                editProject.expected_delivery ||
+                                project.expected_delivery ||
+                                null,
+                        }),
+                    }
+                );
+
+            await response.json();
+
+            const refreshedResponse =
+                await fetch(
+                    `${API_URL}/api/projects/${id}`
+                );
+
+            const refreshedProject =
+                await refreshedResponse.json();
+
+            setProject(refreshedProject);
+
+            setShowProjectModal(false);
+
+            toast.success("Project updated successfully");
+
+        } catch (error) {
+
+            console.error(error);
+
+            toast.error("Failed to update project");
+
+        } finally {
+
+            setSaving(false);
+
+        }
+
+    };
+
+
+
+    const handleFatUpload = async () => {
+
+        if (!fatFile) {
+            toast.warning("Please select a FAT report");
+            return;
+        }
+
+        setUploadingFat(true);
+
+        const formData = new FormData();
+
+        formData.append(
+            "project_id",
+            id
+        );
+
+        formData.append(
+            "report",
+            fatFile
+        );
+
+        try {
+
+            await fetch(
+                `${API_URL}/api/fat-reports`,
+                {
+                    method: "POST",
+                    body: formData,
+                }
+            );
+
+            const response =
+                await fetch(
+                    `${API_URL}/api/fat-reports/${id}`
+                );
+
+            const data =
+                await response.json();
+
+            setFatReports(data);
+
+            setFatFile(null);
+
+            setShowFatModal(false);
+
+            toast.success(
+                "FAT Report uploaded successfully"
+            );
+
+        } catch (error) {
+
+            console.error(error);
+
+            toast.error(
+                "Failed to upload FAT Report"
+            );
+
+        } finally {
+
+            setUploadingFat(false);
+
+        }
+
+    };
+
+    const deleteFatReport =
+        async (reportId) => {
+
+            setDeletingFat(true);
 
             try {
 
-                const response =
-                    await fetch(
-                        `${API_URL}/api/projects/${id}`,
-                        {
-                            method: "PUT",
+                await fetch(
+                    `${API_URL}/api/fat-reports/${reportId}`,
+                    {
+                        method: "DELETE",
+                    }
+                );
 
-                            headers: {
-                                "Content-Type":
-                                    "application/json",
-                            },
+                setFatReports(
+                    fatReports.filter(
+                        (report) =>
+                            report.id !== reportId
+                    )
+                );
 
-                            body: JSON.stringify({
-                                ...project,
-                                ...editProject,
+                setShowDeleteFatModal(false);
 
-                                project_value:
-                                    (
-                                        editProject.project_value ??
-                                        project.project_value
-                                    )
-                                        ?.toString()
-                                        .replace(/,/g, ""),
+                setFatReportToDelete(null);
 
-                                start_date:
-                                    editProject.start_date ||
-                                    project.start_date ||
-                                    null,
-
-                                expected_delivery:
-                                    editProject.expected_delivery ||
-                                    project.expected_delivery ||
-                                    null,
-                            }),
-                        }
-                    );
-                await response.json();
-
-                const refreshedResponse =
-                    await fetch(
-                        `${API_URL}/api/projects/${id}`
-                    );
-
-                const refreshedProject =
-                    await refreshedResponse.json();
-
-                setProject(refreshedProject);
-
-                setShowProjectModal(false);
-
-                toast.success("Project updated successfully");
-
-                // alert(
-                //     "Project Updated"
-                // );
+                toast.success(
+                    "FAT Report deleted successfully"
+                );
 
             } catch (error) {
 
                 console.error(error);
 
+                toast.error(
+                    "Failed to delete FAT Report"
+                );
+
+            } finally {
+
+                setDeletingFat(false);
+
             }
 
         };
 
+    const handleUploadImage = async () => {
 
+        if (!selectedImage) {
 
-    const handleFatUpload =
-        async () => {
+            toast.warning(
+                "Please choose an image to upload"
+            );
 
-            if (!fatFile) return;
+            return;
+
+        }
+
+        if (!caption) {
+
+            toast.warning(
+                "Please select a stage"
+            );
+
+            return;
+
+        }
+
+        setUploadingImage(true);
+
+        try {
 
             const formData =
                 new FormData();
@@ -678,170 +888,61 @@ export default function ProjectDetails() {
             );
 
             formData.append(
-                "report",
-                fatFile
+                "caption",
+                caption
             );
 
-            try {
+            formData.append(
+                "image",
+                selectedImage
+            );
 
+            const response =
                 await fetch(
-                    `${API_URL}/api/fat-reports`,
+                    `${API_URL}/api/gallery`,
                     {
                         method: "POST",
                         body: formData,
                     }
                 );
 
-                const response =
-                    await fetch(
-                        `${API_URL}/api/fat-reports/${id}`
-                    );
+            if (!response.ok) {
 
-                const data =
-                    await response.json();
-
-
-                console.log(
-                    "FAT Reports:",
-                    data
+                throw new Error(
+                    "Upload Failed"
                 );
-
-                setFatReports(data);
-
-                setShowFatModal(
-                    false
-                );
-
-                setFatFile(null);
-
-            } catch (error) {
-
-                console.error(error);
 
             }
 
-        };
+            await response.json();
 
-    const deleteFatReport =
-        async (reportId) => {
+            loadGallery();
 
-            await fetch(
-                `${API_URL}/api/fat-reports/${reportId}`,
-                {
-                    method: "DELETE",
-                }
+            setShowGalleryModal(false);
+
+            setSelectedImage(null);
+
+            setCaption("");
+
+            toast.success(
+                "Image uploaded successfully"
             );
 
-            setFatReports(
-                fatReports.filter(
-                    (report) =>
-                        report.id !== reportId
-                )
+        } catch (error) {
+
+            console.error(error);
+
+            toast.error(
+                "Failed to upload image"
             );
 
-        };
+        } finally {
 
-    const handleUploadImage =
-        async () => {
+            setUploadingImage(false);
 
-            try {
+        }
 
-                if (!selectedImage) {
-
-                    toast.warning(
-                        "Please choose an image to upload"
-                    );
-
-                    // alert(
-                    //     "Please select an image"
-                    // );
-
-                    return;
-
-                }
-
-                if (!caption) {
-
-                    toast.warning("Please select a stage");
-
-                    // alert(
-                    //     "Please select a stage"
-                    // );
-
-                    return;
-
-                }
-
-                const formData =
-                    new FormData();
-
-                formData.append(
-                    "project_id",
-                    id
-                );
-
-                formData.append(
-                    "caption",
-                    caption
-                );
-
-                formData.append(
-                    "image",
-                    selectedImage
-                );
-
-                const response =
-                    await fetch(
-                        `${API_URL}/api/gallery`,
-                        {
-                            method: "POST",
-                            body: formData,
-                        }
-                    );
-
-                if (!response.ok) {
-
-                    throw new Error(
-                        "Upload Failed"
-                    );
-
-                }
-
-                await response.json();
-
-                toast.success("Image uploaded successfully");
-
-                // alert(
-                //     "Image Uploaded Successfully"
-                // );
-
-                setShowGalleryModal(
-                    false
-                );
-
-                setSelectedImage(
-                    null
-                );
-
-                setCaption("");
-
-                loadGallery();
-
-            } catch (error) {
-
-                console.error(error);
-
-                toast.error(
-                    "Failed To Upload Image"
-                )
-
-                // alert(
-                //     "Failed To Upload Image"
-                // );
-
-            }
-
-        };
+    };
 
     const loadGallery =
         async () => {
@@ -861,13 +962,7 @@ export default function ProjectDetails() {
     const handleDeleteImage =
         async (imageId) => {
 
-            const confirmDelete =
-                window.confirm(
-                    "Delete this image?"
-                );
-
-            if (!confirmDelete)
-                return;
+            setDeletingImage(true);
 
             try {
 
@@ -880,9 +975,25 @@ export default function ProjectDetails() {
 
                 loadGallery();
 
+                setShowDeleteImageModal(false);
+
+                setImageToDelete(null);
+
+                toast.success(
+                    "Image deleted successfully"
+                );
+
             } catch (error) {
 
                 console.error(error);
+
+                toast.error(
+                    "Failed to delete image"
+                );
+
+            } finally {
+
+                setDeletingImage(false);
 
             }
 
@@ -957,7 +1068,11 @@ export default function ProjectDetails() {
 
                     <div>
                         <label>Project Value</label>
-                        <p>₹ {project.project_value}</p>
+                        <p>
+                            ₹{" "}
+                            {Number(project.project_value).toLocaleString("en-IN")}
+                        </p>
+                        {/* <p>₹ {project.project_value}</p> */}
                     </div>
 
                     <div>
@@ -1030,12 +1145,20 @@ export default function ProjectDetails() {
                         ))}
                     </select>
 
-
+                    {/* update stage */}
                     <button
                         className="action-btn"
                         onClick={handleUpdateStage}
+                        disabled={updatingStage}
                     >
-                        Update Stage
+                        {updatingStage ? (
+                            <>
+                                <span className="button-spinner"></span>
+                                Updating...
+                            </>
+                        ) : (
+                            "Update Stage"
+                        )}
                     </button>
 
 
@@ -1196,22 +1319,16 @@ export default function ProjectDetails() {
 
                     </div>
 
-                    <input
-                        type="file"
-                        onChange={(e) =>
-                            setSelectedFile(
-                                e.target.files[0]
-                            )
-                        }
-                    />
+
+
 
                     <button
                         className="mini-btn"
-                        onClick={
-                            handleUploadDocument
+                        onClick={() =>
+                            setShowDocumentModal(true)
                         }
                     >
-                        Upload
+                        + Upload Document
                     </button>
 
                     {documents.map((doc) => (
@@ -1228,7 +1345,7 @@ export default function ProjectDetails() {
                             <div className="document-actions">
 
                                 <a
-                                  href={`${STORAGE_URL}/documents/${doc.file_path}`}
+                                    href={`${STORAGE_URL}/documents/${doc.file_path}`}
                                     target="_blank"
                                     rel="noreferrer"
                                     className="mini-btn"
@@ -1238,11 +1355,13 @@ export default function ProjectDetails() {
 
                                 <button
                                     className="delete-doc-btn"
-                                    onClick={() =>
-                                        handleDeleteDocument(
-                                            doc.id
-                                        )
-                                    }
+                                    onClick={() => {
+
+                                        setDocumentToDelete(doc.id);
+
+                                        setShowDeleteDocumentModal(true);
+
+                                    }}
                                 >
                                     Delete
                                 </button>
@@ -1364,14 +1483,15 @@ export default function ProjectDetails() {
                                 >
                                     View
                                 </a>
-
                                 <button
                                     className="delete-btn"
-                                    onClick={() =>
-                                        deleteFatReport(
-                                            report.id
-                                        )
-                                    }
+                                    onClick={() => {
+
+                                        setFatReportToDelete(report.id);
+
+                                        setShowDeleteFatModal(true);
+
+                                    }}
                                 >
                                     Delete
                                 </button>
@@ -1453,11 +1573,13 @@ export default function ProjectDetails() {
 
                                 <button
                                     className="delete-image-btn"
-                                    onClick={() =>
-                                        handleDeleteImage(
-                                            image.id
-                                        )
-                                    }
+                                    onClick={() => {
+
+                                        setImageToDelete(image.id);
+
+                                        setShowDeleteImageModal(true);
+
+                                    }}
                                 >
                                     Delete
                                 </button>
@@ -1508,18 +1630,15 @@ export default function ProjectDetails() {
                                 })
                             }
                         />
+
                         <input
                             type="number"
-                            value={
-                                editProject.project_value
-                            }
+                            step="0.01"
+                            value={editProject.project_value}
                             onChange={(e) =>
                                 setEditProject({
                                     ...editProject,
-
-
-                                    project_value:
-                                        e.target.value,
+                                    project_value: e.target.value,
                                 })
                             }
                         />
@@ -1561,14 +1680,23 @@ export default function ProjectDetails() {
                             >
                                 Cancel
                             </button>
+                            {/* saving */}
+
                             <button
                                 className="save-btn"
-                                onClick={
-                                    handleSaveProject
-                                }
+                                onClick={handleSaveProject}
+                                disabled={saving}
                             >
-                                Save Project
+                                {saving ? (
+                                    <>
+                                        <span className="button-spinner"></span>
+                                        Saving...
+                                    </>
+                                ) : (
+                                    "Save Changes"
+                                )}
                             </button>
+
 
                         </div>
 
@@ -1714,11 +1842,70 @@ export default function ProjectDetails() {
 
                             <button
                                 className="save-btn"
-                                onClick={
-                                    handleSaveDispatch
+                                onClick={handleSaveDispatch}
+                                disabled={savingDispatch}
+                            >
+                                {savingDispatch ? (
+                                    <>
+                                        <span className="button-spinner"></span>
+                                        Saving...
+                                    </>
+                                ) : (
+                                    "Save"
+                                )}
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            )}
+
+            {showDocumentModal && (
+
+                <div className="modal-overlay">
+
+                    <div className="project-modal">
+
+                        <h2>
+                            Upload Document
+                        </h2>
+
+                        <input
+                            type="file"
+                            onChange={(e) =>
+                                setSelectedFile(
+                                    e.target.files[0]
+                                )
+                            }
+                        />
+
+                        <div className="modal-actions">
+
+                            <button
+                                className="cancel-btn"
+                                onClick={() =>
+                                    setShowDocumentModal(false)
                                 }
                             >
-                                Save
+                                Cancel
+                            </button>
+
+                            <button
+                                className="save-btn"
+                                onClick={handleUploadDocument}
+                                disabled={uploadingDocument}
+                            >
+                                {uploadingDocument ? (
+                                    <>
+                                        <span className="button-spinner"></span>
+                                        Uploading...
+                                    </>
+                                ) : (
+                                    "Upload"
+                                )}
                             </button>
 
                         </div>
@@ -1765,11 +1952,17 @@ export default function ProjectDetails() {
 
                             <button
                                 className="save-btn"
-                                onClick={
-                                    handleFatUpload
-                                }
+                                onClick={handleFatUpload}
+                                disabled={uploadingFat}
                             >
-                                Upload
+                                {uploadingFat ? (
+                                    <>
+                                        <span className="button-spinner"></span>
+                                        Uploading...
+                                    </>
+                                ) : (
+                                    "Upload"
+                                )}
                             </button>
 
                         </div>
@@ -1858,11 +2051,195 @@ export default function ProjectDetails() {
 
                             <button
                                 className="save-btn"
-                                onClick={
-                                    handleUploadImage
+                                onClick={handleUploadImage}
+                                disabled={uploadingImage}
+                            >
+                                {uploadingImage ? (
+                                    <>
+                                        <span className="button-spinner"></span>
+                                        Uploading...
+                                    </>
+                                ) : (
+                                    "Upload"
+                                )}
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            )}
+
+            {showDeleteDocumentModal && (
+
+                <div className="modal-overlay">
+
+                    <div className="project-modal">
+
+                        <h2>
+                            Delete Document
+                        </h2>
+
+                        <p
+                            style={{
+                                marginTop: "15px",
+                                marginBottom: "25px",
+                                color: "#666",
+                            }}
+                        >
+                            Are you sure you want to permanently
+                            delete this document?
+                        </p>
+
+                        <div className="modal-actions">
+
+                            <button
+                                className="cancel-btn"
+                                onClick={() =>
+                                    setShowDeleteDocumentModal(false)
                                 }
                             >
-                                Upload
+                                Cancel
+                            </button>
+
+                            <button
+                                className="delete-btn"
+                                disabled={deletingDocument}
+                                onClick={() =>
+                                    handleDeleteDocument(
+                                        documentToDelete
+                                    )
+                                }
+                            >
+                                {deletingDocument ? (
+                                    <>
+                                        <span className="button-spinner"></span>
+                                        Deleting...
+                                    </>
+                                ) : (
+                                    "Delete"
+                                )}
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            )}
+
+
+            {showDeleteFatModal && (
+
+                <div className="modal-overlay">
+
+                    <div className="project-modal">
+
+                        <h2>
+                            Delete FAT Report
+                        </h2>
+
+                        <p
+                            style={{
+                                marginTop: "15px",
+                                marginBottom: "25px",
+                                color: "#666",
+                            }}
+                        >
+                            Are you sure you want to permanently
+                            delete this FAT report?
+                        </p>
+
+                        <div className="modal-actions">
+
+                            <button
+                                className="cancel-btn"
+                                onClick={() =>
+                                    setShowDeleteFatModal(false)
+                                }
+                            >
+                                Cancel
+                            </button>
+
+                            <button
+                                className="delete-btn"
+                                disabled={deletingFat}
+                                onClick={() =>
+                                    deleteFatReport(
+                                        fatReportToDelete
+                                    )
+                                }
+                            >
+                                {deletingFat ? (
+                                    <>
+                                        <span className="button-spinner"></span>
+                                        Deleting...
+                                    </>
+                                ) : (
+                                    "Delete"
+                                )}
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            )}
+
+            {showDeleteImageModal && (
+
+                <div className="modal-overlay">
+
+                    <div className="project-modal">
+
+                        <h2>
+                            Delete Image
+                        </h2>
+
+                        <p
+                            style={{
+                                marginTop: "15px",
+                                marginBottom: "25px",
+                                color: "#666",
+                            }}
+                        >
+                            Are you sure you want to permanently
+                            delete this image?
+                        </p>
+
+                        <div className="modal-actions">
+
+                            <button
+                                className="cancel-btn"
+                                onClick={() =>
+                                    setShowDeleteImageModal(false)
+                                }
+                            >
+                                Cancel
+                            </button>
+
+                            <button
+                                className="delete-btn"
+                                disabled={deletingImage}
+                                onClick={() =>
+                                    handleDeleteImage(
+                                        imageToDelete
+                                    )
+                                }
+                            >
+                                {deletingImage ? (
+                                    <>
+                                        <span className="button-spinner"></span>
+                                        Deleting...
+                                    </>
+                                ) : (
+                                    "Delete"
+                                )}
                             </button>
 
                         </div>

@@ -1,0 +1,118 @@
+.skeleton {
+
+    background: #e8f1ff;
+
+}
+
+.skeleton::after {
+
+    background: linear-gradient(90deg,
+            transparent,
+            rgba(37, 99, 235, .35),
+            transparent);
+
+}
+
+.loading-message {
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    min-height: 120px;
+
+    margin-bottom: 20px;
+
+    text-align: center;
+
+    font-size: 30px;
+
+    font-weight: 700;
+
+    color: #1f2937;
+
+    letter-spacing: .4px;
+
+    animation: fadeMessage .5s ease;
+
+}
+
+.loading-message span {
+
+    color: #2563eb;
+
+    margin-left: 8px;
+
+}
+
+.loading-message::after {
+
+    content: "...";
+
+    display: inline-block;
+
+    width: 28px;
+
+    text-align: left;
+
+    overflow: hidden;
+
+    animation: dots 1.5s infinite;
+
+}
+
+.loading-message-row {
+
+    padding: 28px;
+
+    text-align: center;
+
+    font-size: 22px;
+
+    font-weight: 700;
+
+    color: #374151;
+
+}
+
+@keyframes fadeMessage {
+
+    from {
+
+        opacity: 0;
+
+        transform: translateY(15px);
+
+    }
+
+    to {
+
+        opacity: 1;
+
+        transform: translateY(0);
+
+    }
+
+}
+
+@keyframes dots {
+
+    0% {
+        width: 0;
+    }
+
+    33% {
+        width: 8px;
+    }
+
+    66% {
+        width: 18px;
+    }
+
+    100% {
+        width: 28px;
+    }
+
+}

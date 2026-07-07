@@ -3,6 +3,7 @@ import "./Dashboard.css";
 import { useNavigate, Navigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { API_URL } from "../config";
+import SkeletonLoader from "../components/SkeletonLoader";
 
 export default function Dashboard() {
   const navigate = useNavigate();
@@ -39,8 +40,10 @@ export default function Dashboard() {
   };
 
   if (!stats) {
-    return <h2>Loading...</h2>;
+    return <SkeletonLoader type="dashboard" />
   }
+
+
 
 
   return (
@@ -124,6 +127,7 @@ export default function Dashboard() {
 
 
       </div>
+
 
 
 

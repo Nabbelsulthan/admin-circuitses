@@ -3,13 +3,15 @@ import { useState, useEffect } from "react";
 import "./Projects.css";
 import { useNavigate } from "react-router-dom";
 import { API_URL } from "../config";
+import SkeletonLoader from "../components/SkeletonLoader";
+import { toast } from "react-toastify";
 
 export default function Projects() {
   const navigate = useNavigate();
 
   const [projects, setProjects] = useState([]);
   const [showModal, setShowModal] = useState(false);
-
+  const [loading, setLoading] = useState(true);
   const [newProject, setNewProject] = useState({
     projectName: "",
     customer_id: "",
@@ -23,7 +25,21 @@ export default function Projects() {
   const [customers, setCustomers] =
     useState([]);
 
+  const [savingProject, setSavingProject] =
+    useState(false);
+
+  const [showDeleteProjectModal, setShowDeleteProjectModal] =
+    useState(false);
+
+  const [projectToDelete, setProjectToDelete] =
+    useState(null);
+
+  const [deletingProject, setDeletingProject] =
+    useState(false);
+
   const loadProjects = () => {
+
+    setLoading(true);
     fetch(
       `${API_URL}/api/projects`
     )
@@ -33,6 +49,9 @@ export default function Projects() {
       })
       .catch((err) => {
         console.error(err);
+      })
+      .finally(() => {
+        setLoading(false);
       });
   };
 
@@ -53,7 +72,11 @@ export default function Projects() {
   };
 
   const handleAddProject = async () => {
+
+    setSavingProject(true);
+
     try {
+
       const response = await fetch(
         `${API_URL}/api/projects`,
         {
@@ -69,6 +92,7 @@ export default function Projects() {
             customer_id: Number(
               newProject.customer_id
             ),
+
             status:
               newProject.status,
 
@@ -95,7 +119,9 @@ export default function Projects() {
       );
 
       if (!response.ok) {
-        throw new Error("Failed to save project");
+        throw new Error(
+          "Failed to save project"
+        );
       }
 
       await response.json();
@@ -113,9 +139,25 @@ export default function Projects() {
       });
 
       setShowModal(false);
+
+      toast.success(
+        "Project created successfully"
+      );
+
     } catch (error) {
+
       console.error(error);
+
+      toast.error(
+        "Failed to create project"
+      );
+
+    } finally {
+
+      setSavingProject(false);
+
     }
+
   };
 
 
@@ -131,18 +173,16 @@ export default function Projects() {
 
   }, []);
 
+  if (loading) {
+    return <SkeletonLoader />;
+  }
+
 
 
   const handleDeleteProject =
     async (id) => {
 
-      const confirmDelete =
-        window.confirm(
-          "Delete this project?"
-        );
-
-      if (!confirmDelete)
-        return;
+      setDeletingProject(true);
 
       try {
 
@@ -155,13 +195,29 @@ export default function Projects() {
 
         loadProjects();
 
+        setShowDeleteProjectModal(false);
+
+        setProjectToDelete(null);
+
+        toast.success(
+          "Project deleted successfully"
+        );
+
       } catch (error) {
 
         console.error(error);
 
-      }
-    };
+        toast.error(
+          "Failed to delete project"
+        );
 
+      } finally {
+
+        setDeletingProject(false);
+
+      }
+
+    };
 
   return (
     <div className="projects-page">
@@ -197,11 +253,12 @@ export default function Projects() {
 
 
           <tbody>
-            {projects.map((project) => (
-              <tr key={project.id}>
-                <td>{project.project_name}</td>
 
-                {/* <td>{project.customer_id}</td> */}
+            {projects.map((project) => (
+
+              <tr key={project.id}>
+
+                <td>{project.project_name}</td>
 
                 <td>{project.company_name}</td>
 
@@ -211,20 +268,7 @@ export default function Projects() {
 
                 <td>{project.panel_type}</td>
 
-                <td>
-                  {project.project_engineer}
-                </td>
-                {/* <td>
-                  <button
-                    className="view-btn"
-                    onClick={() =>
-                      navigate(`/projects/${project.id}`)
-                    }
-                  >
-                    View
-                  </button>
-                </td> */}
-
+                <td>{project.project_engineer}</td>
 
                 <td>
 
@@ -241,31 +285,92 @@ export default function Projects() {
 
                   <button
                     className="delete-btn"
-                    onClick={() =>
-                      handleDeleteProject(
-                        project.id
-                      )
-                    }
+                    onClick={() => {
+
+                      setProjectToDelete(project.id);
+
+                      setShowDeleteProjectModal(true);
+
+                    }}
                   >
                     Delete
                   </button>
 
                 </td>
 
-
-
-
-
-
-
-
               </tr>
+
             ))}
+
           </tbody>
 
 
         </table>
       </div>
+
+
+      {
+        showDeleteProjectModal && (
+
+          <div className="modal-overlay">
+
+            <div className="project-modal">
+
+
+
+              <div className="delete-icon">
+                🗑️
+              </div>
+
+              <h2>
+                Delete Project
+              </h2>
+
+
+              <p>
+                Are you sure you want to permanently
+                delete this project?
+              </p>
+
+              <div className="modal-actions">
+
+                <button
+                  className="cancel-btn"
+                  onClick={() =>
+                    setShowDeleteProjectModal(false)
+                  }
+                >
+                  Cancel
+                </button>
+
+                <button
+                  className="delete-btn"
+                  disabled={deletingProject}
+                  onClick={() =>
+                    handleDeleteProject(
+                      projectToDelete
+                    )
+                  }
+                >
+                  {deletingProject ? (
+                    <>
+                      <span className="button-spinner"></span>
+                      Deleting...
+                    </>
+                  ) : (
+                    "Delete"
+                  )}
+                </button>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        )
+      }
+
 
       {showModal && (
         <div className="modal-overlay">
@@ -469,8 +574,16 @@ export default function Projects() {
               <button
                 className="save-btn"
                 onClick={handleAddProject}
+                disabled={savingProject}
               >
-                Save Project
+                {savingProject ? (
+                  <>
+                    <span className="button-spinner"></span>
+                    Saving...
+                  </>
+                ) : (
+                  "Save Project"
+                )}
               </button>
             </div>
           </div>
@@ -478,4 +591,6 @@ export default function Projects() {
       )}
     </div>
   );
+
+
 }

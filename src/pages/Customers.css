@@ -22,7 +22,7 @@
   background: white;
   border-radius: 18px;
   overflow: hidden;
-  box-shadow: 0 10px 25px rgba(0,0,0,.05);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, .05);
 }
 
 .customers-table {
@@ -58,4 +58,20 @@
   padding: 12px;
   border: 1px solid #ddd;
   border-radius: 10px;
+}
+
+.delete-message {
+
+  color: #555;
+  text-align: center;
+  line-height: 1.7;
+  margin: 20px 0 30px;
+
+}
+
+.delete-message span {
+
+  color: #d32f2f;
+  font-weight: 600;
+
 }
