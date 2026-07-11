@@ -510,9 +510,7 @@ a {
   margin-bottom: 8px;
 } */
 
-.gallery-preview {
-  cursor: pointer;
-}
+
 
 .image-modal {
   position: fixed;
@@ -542,6 +540,10 @@ a {
   height: 150px;
   object-fit: cover;
   border-radius: 10px;
+}
+
+.gallery-preview {
+  cursor: pointer;
 }
 
 .gallery-item {
