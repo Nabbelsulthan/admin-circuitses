@@ -1,0 +1,74 @@
+.department-page{
+
+    padding:30px;
+
+}
+
+.department-form{
+
+    display:flex;
+
+    gap:15px;
+
+    margin:30px 0;
+
+}
+
+.department-form input{
+
+    flex:1;
+
+    padding:12px;
+
+    border-radius:8px;
+
+    border:1px solid #ddd;
+
+}
+
+.department-form button{
+
+    padding:12px 20px;
+
+    border:none;
+
+    background:#2563eb;
+
+    color:white;
+
+    border-radius:8px;
+
+    cursor:pointer;
+
+}
+
+.department-table{
+
+    width:100%;
+
+    border-collapse:collapse;
+
+    background:white;
+
+}
+
+.department-table th,
+.department-table td{
+
+    padding:15px;
+
+    border-bottom:1px solid #eee;
+
+}
+
+.active{
+
+    background:#d1fae5;
+
+    color:#059669;
+
+    padding:5px 12px;
+
+    border-radius:20px;
+
+}

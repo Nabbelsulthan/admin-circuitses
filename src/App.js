@@ -17,9 +17,17 @@ import Documents from "./pages/Documents";
 import Dispatch from "./pages/Dispatch";
 import Updates from "./pages/Updates";
 import CustomerDetails from "./pages/CustomerDetails";
-
+import HRDashboard from "./pages/HR/Dashboard/HRDashboard";
+import HR from "./pages/HR/HR";
+import Departments from "./pages/HR/Departments";
+import Employees from "./pages/HR/Employees";
+import Attendance from "./pages/HR/Attendance";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+
+
+
+
 function App() {
   return (
     <BrowserRouter>
@@ -66,7 +74,36 @@ function App() {
             element={<CustomerDetails />}
           />
 
+
+          <Route
+            path="/hr/dashboard"
+            element={<HRDashboard />}
+          />
+
+          <Route
+            path="/hr"
+            element={<HR />}
+          />
+
+          <Route
+            path="/hr/departments"
+            element={<Departments />}
+          />
+
+
+          <Route
+            path="/hr/employees"
+            element={<Employees />}
+          />
+
+          <Route
+            path="/hr/attendance"
+            element={<Attendance />}
+          />
+
+
         </Route>
+
 
       </Routes>
 
