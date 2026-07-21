@@ -444,15 +444,23 @@ export default function Projects() {
               </option>
 
               <option value="Control Panel">
-                Control Panel
+                PLC Control Panel
               </option>
 
               <option value="PLC Panel">
-                PLC Panel
+                Automation Panel
               </option>
 
               <option value="Metering Panel">
                 Metering Panel
+              </option>
+
+              <option value="Metering Panel">
+                LT Panel
+              </option>
+
+              <option value="Metering Panel">
+                Enclosures
               </option>
             </select>
 
