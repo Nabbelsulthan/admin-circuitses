@@ -443,11 +443,11 @@ export default function Projects() {
                 APFC Panel
               </option>
 
-              <option value="Control Panel">
+              <option value="PLC Control Panel">
                 PLC Control Panel
               </option>
 
-              <option value="PLC Panel">
+              <option value="Automation Panel">
                 Automation Panel
               </option>
 
@@ -455,11 +455,11 @@ export default function Projects() {
                 Metering Panel
               </option>
 
-              <option value="Metering Panel">
+              <option value="LT Panel">
                 LT Panel
               </option>
 
-              <option value="Metering Panel">
+              <option value="Enclosures">
                 Enclosures
               </option>
             </select>
