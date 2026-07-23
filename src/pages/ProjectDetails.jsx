@@ -8,6 +8,8 @@ import { STORAGE_URL } from "../config/storage";
 import SkeletonLoader from "../components/SkeletonLoader";
 
 
+
+
 // saving 
 
 
@@ -167,7 +169,6 @@ export default function ProjectDetails() {
 
     const [deletingDocument, setDeletingDocument] =
         useState(false);
-
 
 
 
