@@ -993,3 +993,274 @@
   }
 
 }
+
+
+
+
+
+/* projects headers */
+
+
+/* =====================================================
+   CUSTOMER PROJECT SELECTION
+   ===================================================== */
+
+.customer-project-grid {
+    display: grid;
+    grid-template-columns: repeat(
+        auto-fill,
+        minmax(280px, 1fr)
+    );
+    gap: 18px;
+    margin-top: 10px;
+}
+
+
+/* CUSTOMER CARD */
+
+.customer-project-card {
+    position: relative;
+
+    display: flex;
+    align-items: center;
+
+    gap: 16px;
+
+    padding: 22px;
+
+    background: #ffffff;
+
+    border: 1px solid #e6e9ef;
+
+    border-radius: 14px;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        border-color 0.2s ease;
+}
+
+
+.customer-project-card:hover {
+    transform: translateY(-3px);
+
+    border-color: #cfd5df;
+
+    box-shadow:
+        0 8px 24px rgba(
+            0,
+            0,
+            0,
+            0.08
+        );
+}
+
+
+/* ICON */
+
+.customer-card-icon {
+    width: 52px;
+    height: 52px;
+
+    min-width: 52px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 12px;
+
+    background: #f1f4f8;
+
+    color: #1f2937;
+}
+
+
+.customer-card-icon svg {
+    font-size: 27px;
+}
+
+
+/* CONTENT */
+
+.customer-card-content {
+    min-width: 0;
+
+    flex: 1;
+}
+
+
+.customer-card-content h3 {
+    margin: 0 0 5px;
+
+    font-size: 16px;
+
+    font-weight: 600;
+
+    color: #1d2433;
+
+    white-space: nowrap;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+}
+
+
+.customer-card-content p {
+    margin: 0;
+
+    font-size: 13px;
+
+    color: #7b8494;
+}
+
+
+/* ARROW */
+
+.customer-card-arrow {
+    font-size: 22px;
+
+    color: #8b94a3;
+
+    transition:
+        transform 0.2s ease;
+}
+
+
+.customer-project-card:hover
+.customer-card-arrow {
+    transform: translateX(4px);
+}
+
+
+/* =====================================================
+   BACK TO CUSTOMERS
+   ===================================================== */
+
+.back-to-customers-btn {
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+    margin-bottom: 8px;
+
+    padding: 0;
+
+    border: none;
+
+    background: transparent;
+
+    color: #6b7280;
+
+    font-size: 13px;
+
+    font-weight: 500;
+
+    cursor: pointer;
+
+    transition:
+        color 0.2s ease;
+}
+
+
+.back-to-customers-btn:hover {
+    color: #111827;
+}
+
+
+.back-to-customers-btn svg {
+    font-size: 18px;
+}
+
+
+/* =====================================================
+   EMPTY CUSTOMER STATE
+   ===================================================== */
+
+.no-customers {
+    grid-column: 1 / -1;
+
+    min-height: 260px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+    text-align: center;
+
+    background: #ffffff;
+
+    border: 1px solid #e6e9ef;
+
+    border-radius: 14px;
+
+    color: #7b8494;
+}
+
+
+.no-customers svg {
+    font-size: 44px;
+
+    margin-bottom: 10px;
+
+    color: #a2a9b5;
+}
+
+
+.no-customers h3 {
+    margin: 0 0 6px;
+
+    color: #303846;
+
+    font-size: 16px;
+}
+
+
+.no-customers p {
+    margin: 0;
+
+    font-size: 13px;
+}
+
+
+/* =====================================================
+   EMPTY PROJECTS
+   ===================================================== */
+
+.empty-projects {
+    padding: 50px !important;
+
+    text-align: center;
+
+    color: #7b8494;
+
+    font-size: 14px;
+}
+
+
+/* =====================================================
+   RESPONSIVE
+   ===================================================== */
+
+@media (max-width: 768px) {
+
+    .customer-project-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .customer-project-card {
+        padding: 18px;
+    }
+
+}
