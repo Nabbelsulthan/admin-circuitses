@@ -1,4 +1,4 @@
-.customers-page {
+/* .customers-page {
   padding: 30px;
 }
 
@@ -74,4 +74,889 @@
   color: #d32f2f;
   font-weight: 600;
 
+} */
+
+
+
+
+
+/* =========================================================
+   CES ADMIN PORTAL
+   CUSTOMERS PAGE
+   ========================================================= */
+
+
+/* =========================================================
+   PAGE
+   ========================================================= */
+
+.customers-page {
+  width: 100%;
+  min-height: 100%;
+
+  padding: 24px 28px 32px;
+
+  box-sizing: border-box;
+
+  background: #f7f8fa;
 }
+
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.customers-header {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 24px;
+
+  margin-bottom: 22px;
+}
+
+
+/* TITLE */
+
+.customers-header h1 {
+  margin: 0;
+
+  color: #18212f;
+
+  font-size: 28px;
+
+  line-height: 1.2;
+
+  font-weight: 750;
+
+  letter-spacing: -0.5px;
+}
+
+
+/* SUBTITLE */
+
+.customers-header p {
+  margin: 6px 0 0;
+
+  color: #7b8492;
+
+  font-size: 14px;
+
+  line-height: 1.5;
+}
+
+
+/* =========================================================
+   ADD CUSTOMER
+   ========================================================= */
+
+.add-customer-btn {
+  display: inline-flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  flex-shrink: 0;
+
+  min-height: 42px;
+
+  padding: 0 18px;
+
+  border: 1px solid #55b532;
+
+  border-radius: 8px;
+
+  background: #55b532;
+
+  color: #ffffff;
+
+  font-family: inherit;
+
+  font-size: 14px;
+
+  font-weight: 650;
+
+  cursor: pointer;
+
+  transition:
+    background 0.18s ease,
+    border-color 0.18s ease,
+    transform 0.18s ease;
+}
+
+
+.add-customer-btn:hover {
+  background: #469d29;
+
+  border-color: #469d29;
+
+  transform: translateY(-1px);
+}
+
+
+.add-customer-btn:active {
+  transform: translateY(0);
+}
+
+
+/* =========================================================
+   TABLE CONTAINER
+   ========================================================= */
+
+.customers-table-card {
+  width: 100%;
+
+  overflow: hidden;
+
+  background: #ffffff;
+
+  border: 1px solid #e5e7eb;
+
+  border-radius: 10px;
+
+  box-shadow:
+    0 2px 8px rgba(15,
+      23,
+      42,
+      0.035);
+}
+
+
+/* =========================================================
+   TABLE
+   ========================================================= */
+
+.customers-table {
+  width: 100%;
+
+  border-collapse: collapse;
+
+  table-layout: auto;
+}
+
+
+/* =========================================================
+   TABLE HEADER
+   ========================================================= */
+
+.customers-table thead {
+  background: #fafbfc;
+}
+
+
+.customers-table th {
+  padding: 13px 18px;
+
+  border-bottom: 1px solid #e5e7eb;
+
+  color: #737d8b;
+
+  font-size: 11px;
+
+  line-height: 1.4;
+
+  font-weight: 700;
+
+  text-align: left;
+
+  text-transform: uppercase;
+
+  letter-spacing: 0.65px;
+
+  white-space: nowrap;
+}
+
+
+/* =========================================================
+   TABLE CELLS
+   ========================================================= */
+
+.customers-table td {
+  padding: 15px 18px;
+
+  border-bottom: 1px solid #f0f1f3;
+
+  color: #3d4654;
+
+  font-size: 13px;
+
+  line-height: 1.4;
+
+  vertical-align: middle;
+}
+
+
+/* LAST ROW */
+
+.customers-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+
+/* ROW HOVER */
+
+.customers-table tbody tr {
+  transition:
+    background 0.15s ease;
+}
+
+
+.customers-table tbody tr:hover {
+  background: #fafcf9;
+}
+
+
+/* =========================================================
+   COMPANY NAME
+   ========================================================= */
+
+.customers-table td:first-child {
+  color: #202938;
+
+  font-size: 14px;
+
+  font-weight: 650;
+}
+
+
+/* =========================================================
+   EMAIL
+   ========================================================= */
+
+.customers-table td:nth-child(3) {
+  color: #5f6977;
+}
+
+
+/* =========================================================
+   PHONE
+   ========================================================= */
+
+.customers-table td:nth-child(4) {
+  color: #5f6977;
+
+  white-space: nowrap;
+}
+
+
+/* =========================================================
+   USERNAME
+   ========================================================= */
+
+.customers-table td:nth-child(5) {
+  color: #596473;
+
+  font-family: monospace;
+
+  font-size: 12.5px;
+}
+
+
+/* =========================================================
+   ACTION COLUMN
+   ========================================================= */
+
+.customers-table td:last-child {
+  white-space: nowrap;
+
+  width: 1%;
+}
+
+
+/* =========================================================
+   VIEW BUTTON
+   ========================================================= */
+
+.customers-table .view-btn {
+  display: inline-flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  height: 34px;
+
+  min-width: 62px;
+
+  padding: 0 13px;
+
+  margin-right: 7px;
+
+  border: 1px solid #d7e3f4;
+
+  border-radius: 7px;
+
+  background: #f5f8fd;
+
+  color: #3974c5;
+
+  font-family: inherit;
+
+  font-size: 12px;
+
+  font-weight: 650;
+
+  line-height: 1;
+
+  cursor: pointer;
+
+  transition:
+    background 0.15s ease,
+    border-color 0.15s ease,
+    color 0.15s ease;
+}
+
+
+.customers-table .view-btn:hover {
+  background: #eaf2fd;
+
+  border-color: #bfd3ed;
+
+  color: #2d65b2;
+}
+
+
+.customers-table .view-btn:active {
+  background: #e1ecfb;
+}
+
+
+/* =========================================================
+   DELETE BUTTON
+   ========================================================= */
+
+.customers-table .delete-btn {
+  display: inline-flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  height: 34px;
+
+  min-width: 68px;
+
+  padding: 0 13px;
+
+  border: 1px solid #efd2d2;
+
+  border-radius: 7px;
+
+  background: #fff7f7;
+
+  color: #d34a4a;
+
+  font-family: inherit;
+
+  font-size: 12px;
+
+  font-weight: 650;
+
+  line-height: 1;
+
+  cursor: pointer;
+
+  transition:
+    background 0.15s ease,
+    border-color 0.15s ease,
+    color 0.15s ease;
+}
+
+
+.customers-table .delete-btn:hover {
+  background: #ffeded;
+
+  border-color: #e8baba;
+
+  color: #bd3737;
+}
+
+
+.customers-table .delete-btn:active {
+  background: #ffe4e4;
+}
+
+
+/* =========================================================
+   MODAL OVERLAY
+   ========================================================= */
+
+.modal-overlay {
+  position: fixed;
+
+  inset: 0;
+
+  z-index: 9999;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  padding: 20px;
+
+  box-sizing: border-box;
+
+  background: rgba(17,
+      24,
+      39,
+      0.48);
+
+  backdrop-filter: blur(4px);
+
+  animation: customerFadeIn 0.18s ease;
+}
+
+
+/* =========================================================
+   CUSTOMER MODAL
+   ========================================================= */
+
+.customer-modal {
+  width: 500px;
+
+  max-width: 100%;
+
+  max-height: calc(100vh - 40px);
+
+  overflow-y: auto;
+
+  padding: 26px;
+
+  box-sizing: border-box;
+
+  background: #ffffff;
+
+  border: 1px solid #e5e7eb;
+
+  border-radius: 12px;
+
+  box-shadow:
+    0 18px 50px rgba(15,
+      23,
+      42,
+      0.18);
+
+  animation: customerModalUp 0.2s ease;
+}
+
+
+/* =========================================================
+   MODAL TITLE
+   ========================================================= */
+
+.customer-modal h2 {
+  margin: 0 0 20px;
+
+  color: #202938;
+
+  font-size: 21px;
+
+  line-height: 1.3;
+
+  font-weight: 700;
+
+  letter-spacing: -0.2px;
+}
+
+
+/* =========================================================
+   CUSTOMER INPUTS
+   ========================================================= */
+
+.customer-modal input {
+  width: 100%;
+
+  height: 42px;
+
+  padding: 0 12px;
+
+  box-sizing: border-box;
+
+  border: 1px solid #dfe3e8;
+
+  border-radius: 7px;
+
+  outline: none;
+
+  background: #ffffff;
+
+  color: #293241;
+
+  font-family: inherit;
+
+  font-size: 13px;
+
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+
+.customer-modal input+input {
+  margin-top: 12px;
+}
+
+
+.customer-modal input::placeholder {
+  color: #a0a7b2;
+}
+
+
+.customer-modal input:hover {
+  border-color: #cbd1d8;
+}
+
+
+.customer-modal input:focus {
+  border-color: #55b532;
+
+  box-shadow:
+    0 0 0 3px rgba(85,
+      181,
+      50,
+      0.10);
+}
+
+
+/* =========================================================
+   MODAL ACTIONS
+   ========================================================= */
+
+.customer-modal .modal-actions {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: flex-end;
+
+  gap: 9px;
+
+  margin-top: 24px;
+
+  padding-top: 18px;
+
+  border-top: 1px solid #eef0f2;
+}
+
+
+/* =========================================================
+   CANCEL BUTTON
+   ========================================================= */
+
+.customer-modal .cancel-btn {
+  min-height: 40px;
+
+  padding: 0 17px;
+
+  border: 1px solid #dfe3e8;
+
+  border-radius: 7px;
+
+  background: #ffffff;
+
+  color: #596270;
+
+  font-family: inherit;
+
+  font-size: 13px;
+
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    background 0.15s ease,
+    border-color 0.15s ease;
+}
+
+
+.customer-modal .cancel-btn:hover {
+  background: #f7f8fa;
+
+  border-color: #cfd4da;
+}
+
+
+/* =========================================================
+   SAVE BUTTON
+   ========================================================= */
+
+.customer-modal .save-btn {
+  display: inline-flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  min-height: 40px;
+
+  padding: 0 18px;
+
+  border: 1px solid #55b532;
+
+  border-radius: 7px;
+
+  background: #55b532;
+
+  color: #ffffff;
+
+  font-family: inherit;
+
+  font-size: 13px;
+
+  font-weight: 650;
+
+  cursor: pointer;
+
+  transition:
+    background 0.15s ease,
+    border-color 0.15s ease;
+}
+
+
+.customer-modal .save-btn:hover:not(:disabled) {
+  background: #469d29;
+
+  border-color: #469d29;
+}
+
+
+.customer-modal .save-btn:disabled {
+  opacity: 0.65;
+
+  cursor: not-allowed;
+}
+
+
+/* =========================================================
+   DELETE MESSAGE
+   ========================================================= */
+
+.delete-message {
+  margin: 0 0 22px;
+
+  color: #737d8b;
+
+  font-size: 13px;
+
+  line-height: 1.6;
+
+  text-align: center;
+}
+
+
+.delete-message span {
+  color: #d34a4a;
+
+  font-weight: 650;
+}
+
+
+/* =========================================================
+   DELETE MODAL BUTTON
+   ========================================================= */
+
+.customer-modal .delete-btn {
+  display: inline-flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  min-height: 40px;
+
+  padding: 0 18px;
+
+  border: 1px solid #d34a4a;
+
+  border-radius: 7px;
+
+  background: #d34a4a;
+
+  color: #ffffff;
+
+  font-family: inherit;
+
+  font-size: 13px;
+
+  font-weight: 650;
+
+  cursor: pointer;
+
+  transition:
+    background 0.15s ease,
+    border-color 0.15s ease;
+}
+
+
+.customer-modal .delete-btn:hover:not(:disabled) {
+  background: #bd3737;
+
+  border-color: #bd3737;
+}
+
+
+.customer-modal .delete-btn:disabled {
+  opacity: 0.65;
+
+  cursor: not-allowed;
+}
+
+
+/* =========================================================
+   BUTTON SPINNER
+   ========================================================= */
+
+.button-spinner {
+  width: 14px;
+
+  height: 14px;
+
+  margin-right: 7px;
+
+  border: 2px solid rgba(255,
+      255,
+      255,
+      0.35);
+
+  border-top-color: #ffffff;
+
+  border-radius: 50%;
+
+  animation:
+    customerButtonSpin 0.7s linear infinite;
+}
+
+
+/* =========================================================
+   TABLET
+   ========================================================= */
+
+@media (max-width: 1000px) {
+
+  .customers-page {
+    padding: 22px 20px 28px;
+  }
+
+  .customers-table-card {
+    overflow-x: auto;
+  }
+
+  .customers-table {
+    min-width: 760px;
+  }
+
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 768px) {
+
+  .customers-page {
+    padding: 18px 14px 24px;
+  }
+
+
+  .customers-header {
+    align-items: flex-start;
+
+    flex-direction: column;
+
+    gap: 14px;
+
+    margin-bottom: 18px;
+  }
+
+
+  .customers-header h1 {
+    font-size: 24px;
+  }
+
+
+  .customers-header p {
+    font-size: 13px;
+  }
+
+
+  .add-customer-btn {
+    width: 100%;
+  }
+
+
+  .customer-modal {
+    padding: 20px;
+
+    border-radius: 10px;
+  }
+
+
+  .customer-modal .modal-actions {
+    flex-direction: column-reverse;
+
+    align-items: stretch;
+  }
+
+
+  .customer-modal .cancel-btn,
+  .customer-modal .save-btn,
+  .customer-modal .delete-btn {
+    width: 100%;
+  }
+
+}
+
+
+/* =========================================================
+   ANIMATIONS
+   ========================================================= */
+
+@keyframes customerFadeIn {
+
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+
+}
+
+
+@keyframes customerModalUp {
+
+  from {
+    opacity: 0;
+
+    transform:
+      translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+
+    transform:
+      translateY(0);
+  }
+
+}
+
+
+@keyframes customerButtonSpin {
+
+  to {
+    transform:
+      rotate(360deg);
+  }
+
+}
+

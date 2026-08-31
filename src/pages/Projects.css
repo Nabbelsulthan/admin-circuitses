@@ -1,1022 +1,168 @@
-/* .projects-page {
-  padding: 30px;
+
+/* =========================================================
+   PROJECTS PAGE
+   CES ADMIN PORTAL
+   ========================================================= */
+
+.projects-page {
+    width: 100%;
+    min-height: 100%;
+    padding: 24px 28px 32px;
+    box-sizing: border-box;
+    background: #f7f8fa;
 }
+
+
+/* =========================================================
+   HEADER
+   ========================================================= */
 
 .projects-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+
+    margin-bottom: 22px;
+    padding: 0;
+
+    background: transparent;
 }
 
+.projects-header-content {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+
+    min-width: 0;
+}
+
+
+/* BACK BUTTON */
+
+.back-to-customers-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+
+    margin: 0 0 8px;
+    padding: 0;
+
+    border: none;
+    background: transparent;
+
+    color: #6b7280;
+
+    font-size: 13px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition: color 0.2s ease;
+}
+
+.back-to-customers-btn:hover {
+    color: #55b532;
+}
+
+.back-to-customers-btn svg {
+    width: 18px;
+    height: 18px;
+}
+
+
+/* TITLE */
+
 .projects-header h1 {
-  margin: 0;
+    margin: 0;
+
+    color: #18212f;
+
+    font-size: 28px;
+    line-height: 1.2;
+    font-weight: 750;
+
+    letter-spacing: -0.5px;
 }
 
 .projects-header p {
-  color: #666;
+    margin: 6px 0 0;
+
+    color: #7b8492;
+
+    font-size: 14px;
+    line-height: 1.5;
 }
+
+
+/* =========================================================
+   ADD PROJECT BUTTON
+   ========================================================= */
 
 .add-project-btn {
-  border: none;
-  background: #55b532;
-  color: white;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 
-  padding: 12px 20px;
+    flex-shrink: 0;
 
-  border-radius: 10px;
+    min-height: 42px;
 
-  cursor: pointer;
+    padding: 0 18px;
 
-  font-weight: 600;
-}
-
-.projects-table-card {
-  background: white;
-  border-radius: 18px;
-  overflow: hidden;
-
-  box-shadow: 0 10px 25px rgba(0, 0, 0, .05);
-}
-
-.projects-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-.projects-table th {
-  background: #f7f7f7;
-  text-align: left;
-  padding: 18px;
-}
-
-.projects-table td {
-  padding: 18px;
-  border-top: 1px solid #eee;
-}
-
-.view-btn {
-  border: none;
-  background: #111827;
-  color: white;
-
-  padding: 8px 14px;
-
-  border-radius: 8px;
-
-  cursor: pointer;
-}
-
-
-.modal-overlay {
-  position: fixed;
-  inset: 0;
-
-  background: rgba(0, 0, 0, .4);
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.project-modal {
-  width: 500px;
-
-  background: white;
-
-  padding: 25px;
-
-  border-radius: 16px;
-
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-}
-
-.project-modal input {
-  padding: 12px;
-
-  border: 1px solid #ddd;
-
-  border-radius: 10px;
-}
-
-.modal-actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 10px;
-}
-
-.cancel-btn {
-  border: none;
-
-  padding: 12px 18px;
-
-  border-radius: 8px;
-
-  cursor: pointer;
-}
-
-.save-btn {
-  border: none;
-
-  background: #55b532;
-  color: white;
-
-  padding: 12px 18px;
-
-  border-radius: 8px;
-
-  cursor: pointer;
-}
-
-.delete-btn {
-  border: none;
-  background: #dc2626;
-  color: white;
-  padding: 8px 14px;
-  border-radius: 8px;
-  cursor: pointer;
-  margin-left: 8px;
-}
-
-
-
-
-
-
-.customer-select {
-  width: 100%;
-  padding: 12px 16px;
-  border: 1px solid #dbe3ee;
-  border-radius: 12px;
-  background: linear-gradient(180deg,
-      #ffffff 0%,
-      #f8fafc 100%);
-  color: #334155;
-  font-size: 14px;
-  font-weight: 500;
-  cursor: pointer;
-  outline: none;
-  transition: all 0.25s ease;
-  box-shadow:
-    0 2px 8px rgba(15, 23, 42, 0.05),
-    inset 0 1px 0 rgba(255, 255, 255, 0.8);
-}
-
-.customer-select:hover {
-  border-color: #60a5fa;
-  box-shadow:
-    0 4px 12px rgba(59, 130, 246, 0.12),
-    inset 0 1px 0 rgba(255, 255, 255, 0.8);
-}
-
-.customer-select:focus {
-  border-color: #2563eb;
-  box-shadow:
-    0 0 0 4px rgba(37, 99, 235, 0.12),
-    0 4px 12px rgba(37, 99, 235, 0.15);
-}
-
-.customer-select option {
-  padding: 12px;
-  background: #fff;
-  color: #334155;
-}
-
-
-.project-modal select {
-  width: 100%;
-  padding: 12px 14px;
-  border: 1px solid #e5e7eb;
-  border-radius: 12px;
-  background: #f9fafb;
-  font-size: 14px;
-  color: #111827;
-  margin-bottom: 14px;
-  transition: all 0.25s ease;
-}
-
-.project-modal select:focus {
-  background: #fff;
-  border-color: #78b82a;
-  box-shadow: 0 0 0 4px rgba(120, 184, 42, 0.12);
-}
-
-.project-modal select:hover {
-  background: #fff;
-}
-
-.delete-icon {
-
-  width: 70px;
-  height: 70px;
-
-  margin: 0 auto 20px;
-
-  border-radius: 50%;
-
-  background: #fdeaea;
-
-  color: #d32f2f;
-
-  display: flex;
-
-  align-items: center;
-
-  justify-content: center;
-
-  font-size: 34px;
-
-}
-
-.edit-btn{
-
-  background:#f59e0b;
-
-  color:#fff;
-
-  border:none;
-
-  padding:10px 18px;
-
-  border-radius:10px;
-
-  cursor:pointer;
-
-  margin-right:8px;
-
-  transition:.25s;
-
-}
-
-.edit-btn:hover{
-
-  background:#d97706;
-
-} */
-
-
-
-
-.projects-header{
-
-  position:relative;
-
-  display:flex;
-
-  justify-content:space-between;
-
-  align-items:center;
-
-  gap:30px;
-
-  padding:34px 40px;
-
-  margin-bottom:30px;
-
-  border-radius:24px;
-
-  overflow:hidden;
-
-  background:
-  linear-gradient(
-  135deg,
-  #0f172a 0%,
-  #1e293b 45%,
-  #2563eb 100%);
-
-  box-shadow:
-  0 20px 45px rgba(37,99,235,.18);
-
-}
-
-.projects-header::before{
-
-  content:"";
-
-  position:absolute;
-
-  right:-120px;
-  top:-120px;
-
-  width:320px;
-  height:320px;
-
-  border-radius:50%;
-
-  background:
-  radial-gradient(
-  rgba(255,255,255,.12),
-  transparent 70%);
-
-}
-
-.projects-header-content{
-
-  position:relative;
-
-  z-index:2;
-
-}
-
-.projects-header h1{
-
-  margin:0;
-
-  font-size:42px;
-
-  font-weight:800;
-
-  color:#fff;
-
-}
-
-.projects-header p{
-
-  margin-top:10px;
-
-  color:rgba(255,255,255,.82);
-
-  font-size:16px;
-
-}
-
-.add-project-btn{
-
-  position:relative;
-
-  z-index:2;
-
-  border:none;
-
-  background:#55b532;
-
-  color:#fff;
-
-  padding:14px 24px;
-
-  border-radius:14px;
-
-  font-size:15px;
-
-  font-weight:700;
-
-  cursor:pointer;
-
-  transition:.3s;
-
-  box-shadow:
-  0 12px 30px rgba(85,181,50,.35);
-
-}
-
-.add-project-btn:hover{
-
-  transform:translateY(-3px);
-
-  background:#429124;
-
-  box-shadow:
-  0 18px 35px rgba(85,181,50,.45);
-
-}
-
-.projects-table-card{
-
-  background:#fff;
-
-  border-radius:24px;
-
-  overflow:hidden;
-
-  border:1px solid #edf2f7;
-
-  box-shadow:
-  0 18px 40px rgba(15,23,42,.06);
-
-}
-
-.projects-table{
-
-  width:100%;
-
-  border-collapse:collapse;
-
-}
-
-.projects-table thead{
-
-  background:#f8fafc;
-
-}
-
-.projects-table th{
-
-  padding:22px 20px;
-
-  text-align:left;
-
-  font-size:13px;
-
-  font-weight:700;
-
-  color:#64748b;
-
-  text-transform:uppercase;
-
-  letter-spacing:1px;
-
-  border-bottom:1px solid #edf2f7;
-
-}
-
-.projects-table td{
-
-  padding:24px 20px;
-
-  border-bottom:1px solid #f1f5f9;
-
-  vertical-align:middle;
-
-  transition:.25s;
-
-}
-
-.projects-table tbody tr{
-
-  transition:.25s ease;
-
-}
-
-.projects-table tbody tr:hover{
-
-  background:#f8fbff;
-
-}
-
-.project-name{
-
-  font-size:17px;
-
-  font-weight:700;
-
-  color:#111827;
-
-}
-
-.project-sub{
-
-  display:block;
-
-  margin-top:6px;
-
-  color:#94a3b8;
-
-  font-size:13px;
-
-}
-
-.customer-name{
-
-  font-weight:700;
-
-  color:#1f2937;
-
-}
-
-.customer-company{
-
-  display:block;
-
-  margin-top:4px;
-
-  color:#64748b;
-
-  font-size:13px;
-
-}
-
-.panel-badge{
-
-  display:inline-flex;
-
-  align-items:center;
-
-  padding:8px 14px;
-
-  border-radius:999px;
-
-  background:#eff6ff;
-
-  color:#2563eb;
-
-  font-size:13px;
-
-  font-weight:700;
-
-}
-
-.engineer-name{
-
-  font-weight:600;
-
-  color:#374151;
-
-}
-
-.status-badge{
-
-  display:inline-flex;
-
-  align-items:center;
-
-  justify-content:center;
-
-  padding:8px 15px;
-
-  border-radius:999px;
-
-  font-size:13px;
-
-  font-weight:700;
-
-}
+    border: 1px solid #55b532;
+    border-radius: 8px;
 
-.status-delivered{
+    background: #55b532;
+    color: #ffffff;
 
-  background:#ecfdf5;
+    font-size: 14px;
+    font-weight: 650;
 
-  color:#16a34a;
+    cursor: pointer;
 
-}
-
-.status-assembly{
-
-  background:#fff7ed;
-
-  color:#ea580c;
-
-}
-.status-testing{
-
-  background:#eef2ff;
-
-  color:#4338ca;
-
-}
-
-.status-design{
-
-  background:#eff6ff;
-
-  color:#2563eb;
-
-}
-
-.status-discussion{
-
-  background:#fef3c7;
-
-  color:#b45309;
-
-}
-
-.dispatch-badge{
-
-  display:inline-flex;
-
-  align-items:center;
-
-  justify-content:center;
-
-  padding:8px 15px;
-
-  border-radius:999px;
-
-  font-size:13px;
-
-  font-weight:700;
-
-}
-
-.dispatch-delivered{
-
-  background:#ecfdf5;
-
-  color:#16a34a;
-
-}
-
-.dispatch-pending{
-
-  background:#fef3c7;
-
-  color:#b45309;
-
-}
-
-.dispatch-ready{
-
-  background:#eff6ff;
-
-  color:#2563eb;
-
-}
-
-.dispatch-na{
-
-  background:#f3f4f6;
-
-  color:#6b7280;
-
-}
-
-.action-buttons{
-
-  display:flex;
-
-  align-items:center;
-
-  gap:12px;
-
-}
-
-.action-btn{
-
-  width:42px;
-
-  height:42px;
-
-  border:none;
-
-  border-radius:12px;
-
-  display:flex;
-
-  justify-content:center;
-
-  align-items:center;
-
-  cursor:pointer;
-
-  transition:.25s ease;
-
-  font-size:17px;
-
-}
-
-.view-btn{
-
-  background:#eff6ff;
-
-  color:#2563eb;
-
-}
-
-.view-btn:hover{
-
-  background:#2563eb;
-
-  color:#fff;
-
-  transform:translateY(-3px);
-
-  box-shadow:
-  0 10px 22px rgba(37,99,235,.28);
-
-}
-.edit-btn{
-
-  background:#fff7ed;
-
-  color:#ea580c;
-
-}
-
-.edit-btn:hover{
-
-  background:#ea580c;
-
-  color:#fff;
-
-  transform:translateY(-3px);
-
-  box-shadow:
-  0 10px 22px rgba(234,88,12,.28);
-
-}
-
-.delete-btn{
-
-  background:#fef2f2;
-
-  color:#dc2626;
-
-}
-
-.delete-btn:hover{
-
-  background:#dc2626;
-
-  color:#fff;
-
-  transform:translateY(-3px);
-
-  box-shadow:
-  0 10px 22px rgba(220,38,38,.28);
-
-}
-
-.modal-overlay{
-
-  position:fixed;
-
-  inset:0;
-
-  background:rgba(15,23,42,.55);
-
-  backdrop-filter:blur(8px);
-
-  display:flex;
-
-  justify-content:center;
-
-  align-items:center;
-
-  padding:20px;
-
-  z-index:9999;
-
-  animation:fadeIn .25s ease;
-
-}
-
-.project-modal{
-
-  width:650px;
-
-  max-width:100%;
-
-  background:#fff;
-
-  border-radius:24px;
-
-  padding:30px;
-
-  box-shadow:
-  0 25px 60px rgba(15,23,42,.25);
-
-  animation:modalUp .3s ease;
+    box-shadow: none;
 
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease,
+        transform 0.2s ease;
 }
 
-.project-modal h2{
+.add-project-btn:hover {
+    background: #469d29;
+    border-color: #469d29;
 
-  margin:0 0 25px;
-
-  font-size:30px;
-
-  font-weight:800;
-
-  color:#111827;
-
-}
-
-.form-grid{
-
-  display:grid;
-
-  grid-template-columns:repeat(2,1fr);
-
-  gap:18px;
-
-}
-
-.form-group{
-
-  display:flex;
-
-  flex-direction:column;
-
-}
-
-.form-group label{
-
-  margin-bottom:8px;
-
-  font-size:14px;
-
-  font-weight:700;
-
-  color:#475569;
-
-}
-
-.project-modal input,
-
-.project-modal select{
-
-  width:100%;
-
-  padding:14px 16px;
-
-  border:1px solid #dbe3ee;
-
-  border-radius:14px;
-
-  background:#f8fafc;
-
-  font-size:15px;
-
-  transition:.25s;
-
-  box-sizing:border-box;
-
-}
-
-.project-modal input:focus,
-
-.project-modal select:focus{
-
-  outline:none;
-
-  background:#fff;
-
-  border-color:#2563eb;
-
-  box-shadow:
-  0 0 0 4px rgba(37,99,235,.12);
-
-}
-
-.project-modal input:hover,
-
-.project-modal select:hover{
-
-  background:#fff;
-
-}
-
-.modal-actions{
-
-  display:flex;
-
-  justify-content:flex-end;
-
-  gap:14px;
-
-  margin-top:28px;
-
-}
-
-
-.cancel-btn{
-
-  padding:13px 22px;
-
-  border:none;
-
-  border-radius:12px;
-
-  background:#f3f4f6;
-
-  color:#374151;
-
-  font-weight:700;
-
-  cursor:pointer;
-
-  transition:.25s;
-
-}
-
-.cancel-btn:hover{
-
-  background:#e5e7eb;
-
-}
-
-.save-btn{
-
-  padding:13px 26px;
-
-  border:none;
-
-  border-radius:12px;
-
-  background:#55b532;
-
-  color:#fff;
-
-  font-weight:700;
-
-  cursor:pointer;
-
-  transition:.25s;
-
-  box-shadow:
-  0 10px 25px rgba(85,181,50,.25);
-
-}
-
-.save-btn:hover{
-
-  background:#429124;
-
-  transform:translateY(-2px);
-
-}
-
-@keyframes fadeIn{
-
-  from{
-
-    opacity:0;
-
-  }
-
-  to{
-
-    opacity:1;
-
-  }
-
-}
-
-@keyframes modalUp{
-
-  from{
-
-    opacity:0;
-
-    transform:translateY(20px);
-
-  }
-
-  to{
-
-    opacity:1;
-
-    transform:translateY(0);
-
-  }
-
+    transform: translateY(-1px);
 }
-
-@media(max-width:768px){
-
-  .project-modal{
-
-    padding:22px;
 
-  }
-
-  .form-grid{
-
-    grid-template-columns:1fr;
-
-  }
-
-  .modal-actions{
-
-    flex-direction:column;
-
-  }
-
-  .cancel-btn,
-
-  .save-btn{
-
-    width:100%;
-
-  }
-
+.add-project-btn:active {
+    transform: translateY(0);
 }
-
-
-
-
-
-/* projects headers */
 
 
-/* =====================================================
-   CUSTOMER PROJECT SELECTION
-   ===================================================== */
+/* =========================================================
+   CUSTOMER LIST
+   ========================================================= */
 
 .customer-project-grid {
     display: grid;
-    grid-template-columns: repeat(
-        auto-fill,
-        minmax(280px, 1fr)
-    );
-    gap: 18px;
-    margin-top: 10px;
+
+    grid-template-columns:
+        repeat(
+            auto-fill,
+            minmax(300px, 1fr)
+        );
+
+    gap: 14px;
+
+    margin: 0;
 }
 
 
-/* CUSTOMER CARD */
+/* =========================================================
+   CUSTOMER CARD
+   ========================================================= */
 
 .customer-project-card {
     position: relative;
@@ -1024,243 +170,937 @@
     display: flex;
     align-items: center;
 
-    gap: 16px;
+    min-height: 82px;
 
-    padding: 22px;
+    padding: 16px 18px;
+
+    box-sizing: border-box;
 
     background: #ffffff;
 
-    border: 1px solid #e6e9ef;
-
-    border-radius: 14px;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
 
     cursor: pointer;
 
     transition:
-        transform 0.2s ease,
+        border-color 0.2s ease,
         box-shadow 0.2s ease,
-        border-color 0.2s ease;
-}
-
-
-.customer-project-card:hover {
-    transform: translateY(-3px);
-
-    border-color: #cfd5df;
-
-    box-shadow:
-        0 8px 24px rgba(
-            0,
-            0,
-            0,
-            0.08
-        );
-}
-
-
-/* ICON */
-
-.customer-card-icon {
-    width: 52px;
-    height: 52px;
-
-    min-width: 52px;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    border-radius: 12px;
-
-    background: #f1f4f8;
-
-    color: #1f2937;
-}
-
-
-.customer-card-icon svg {
-    font-size: 27px;
-}
-
-
-/* CONTENT */
-
-.customer-card-content {
-    min-width: 0;
-
-    flex: 1;
-}
-
-
-.customer-card-content h3 {
-    margin: 0 0 5px;
-
-    font-size: 16px;
-
-    font-weight: 600;
-
-    color: #1d2433;
-
-    white-space: nowrap;
-
-    overflow: hidden;
-
-    text-overflow: ellipsis;
-}
-
-
-.customer-card-content p {
-    margin: 0;
-
-    font-size: 13px;
-
-    color: #7b8494;
-}
-
-
-/* ARROW */
-
-.customer-card-arrow {
-    font-size: 22px;
-
-    color: #8b94a3;
-
-    transition:
         transform 0.2s ease;
 }
 
+.customer-project-card:hover {
+    border-color: #cbd5c4;
+
+    box-shadow:
+        0 4px 14px rgba(
+            15,
+            23,
+            42,
+            0.07
+        );
+
+    transform: translateY(-1px);
+}
+
+
+/* =========================================================
+   CUSTOMER ICON
+   ========================================================= */
+
+.customer-card-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 44px;
+    height: 44px;
+
+    min-width: 44px;
+
+    margin-right: 13px;
+
+    border-radius: 9px;
+
+    background: #f0f8ed;
+
+    color: #55b532;
+}
+
+.customer-card-icon svg {
+    width: 22px;
+    height: 22px;
+}
+
+
+/* =========================================================
+   CUSTOMER CONTENT
+   ========================================================= */
+
+.customer-card-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.customer-card-content h3 {
+    margin: 0;
+
+    overflow: hidden;
+
+    color: #202938;
+
+    font-size: 15px;
+    line-height: 1.4;
+    font-weight: 650;
+
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.customer-card-content p {
+    margin: 4px 0 0;
+
+    color: #8a93a1;
+
+    font-size: 12.5px;
+    line-height: 1.3;
+}
+
+
+/* =========================================================
+   CUSTOMER ARROW
+   ========================================================= */
+
+.customer-card-arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 30px;
+    height: 30px;
+
+    margin-left: 12px;
+
+    border-radius: 7px;
+
+    background: #f7f8fa;
+
+    color: #8b94a1;
+
+    font-size: 17px;
+
+    transition:
+        background 0.2s ease,
+        color 0.2s ease,
+        transform 0.2s ease;
+}
 
 .customer-project-card:hover
 .customer-card-arrow {
-    transform: translateX(4px);
+    background: #f0f8ed;
+
+    color: #55b532;
+
+    transform: translateX(2px);
 }
 
 
-/* =====================================================
-   BACK TO CUSTOMERS
-   ===================================================== */
-
-.back-to-customers-btn {
-    display: inline-flex;
-
-    align-items: center;
-
-    gap: 7px;
-
-    margin-bottom: 8px;
-
-    padding: 0;
-
-    border: none;
-
-    background: transparent;
-
-    color: #6b7280;
-
-    font-size: 13px;
-
-    font-weight: 500;
-
-    cursor: pointer;
-
-    transition:
-        color 0.2s ease;
-}
-
-
-.back-to-customers-btn:hover {
-    color: #111827;
-}
-
-
-.back-to-customers-btn svg {
-    font-size: 18px;
-}
-
-
-/* =====================================================
-   EMPTY CUSTOMER STATE
-   ===================================================== */
+/* =========================================================
+   NO CUSTOMERS
+   ========================================================= */
 
 .no-customers {
     grid-column: 1 / -1;
 
-    min-height: 260px;
-
     display: flex;
-
     flex-direction: column;
-
     align-items: center;
-
     justify-content: center;
 
-    text-align: center;
+    min-height: 220px;
+
+    padding: 30px;
+
+    box-sizing: border-box;
 
     background: #ffffff;
 
-    border: 1px solid #e6e9ef;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
 
-    border-radius: 14px;
-
-    color: #7b8494;
+    text-align: center;
 }
-
 
 .no-customers svg {
-    font-size: 44px;
+    width: 38px;
+    height: 38px;
 
-    margin-bottom: 10px;
+    margin-bottom: 12px;
 
-    color: #a2a9b5;
+    color: #a5adb8;
 }
-
 
 .no-customers h3 {
-    margin: 0 0 6px;
+    margin: 0 0 5px;
 
-    color: #303846;
+    color: #374151;
 
-    font-size: 16px;
+    font-size: 15px;
+    font-weight: 650;
 }
-
 
 .no-customers p {
     margin: 0;
 
+    max-width: 360px;
+
+    color: #8a93a1;
+
     font-size: 13px;
+    line-height: 1.5;
 }
 
 
-/* =====================================================
+/* =========================================================
+   PROJECT TABLE CARD
+   ========================================================= */
+
+.projects-table-card {
+    width: 100%;
+
+    overflow: hidden;
+
+    background: #ffffff;
+
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+
+    box-shadow:
+        0 2px 8px rgba(
+            15,
+            23,
+            42,
+            0.035
+        );
+}
+
+
+/* =========================================================
+   TABLE
+   ========================================================= */
+
+.projects-table {
+    width: 100%;
+
+    border-collapse: collapse;
+
+    table-layout: auto;
+}
+
+
+/* TABLE HEADER */
+
+.projects-table thead {
+    background: #fafbfc;
+}
+
+.projects-table th {
+    padding: 13px 18px;
+
+    border-bottom: 1px solid #e5e7eb;
+
+    color: #737d8b;
+
+    font-size: 11px;
+    line-height: 1.4;
+    font-weight: 700;
+
+    text-align: left;
+
+    text-transform: uppercase;
+    letter-spacing: 0.65px;
+
+    white-space: nowrap;
+}
+
+
+/* TABLE BODY */
+
+.projects-table td {
+    padding: 15px 18px;
+
+    border-bottom: 1px solid #f0f1f3;
+
+    color: #3d4654;
+
+    font-size: 13px;
+    line-height: 1.4;
+
+    vertical-align: middle;
+}
+
+.projects-table tbody tr {
+    transition:
+        background 0.15s ease;
+}
+
+.projects-table tbody tr:hover {
+    background: #fafcf9;
+}
+
+.projects-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+
+/* PROJECT NAME */
+
+.projects-table td:first-child {
+    color: #202938;
+
+    font-weight: 650;
+}
+
+
+/* ENGINEER */
+
+.projects-table td:nth-child(5) {
+    color: #5e6876;
+
+    font-weight: 500;
+}
+
+
+/* =========================================================
+   STATUS BADGES
+   ========================================================= */
+
+.status-badge,
+.dispatch-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    min-height: 27px;
+
+    padding: 0 9px;
+
+    border-radius: 6px;
+
+    font-size: 11.5px;
+    line-height: 1;
+    font-weight: 650;
+
+    white-space: nowrap;
+}
+
+
+/* STATUS */
+
+.status-delivered {
+    background: #edf8e9;
+    color: #3d8c26;
+}
+
+.status-assembly {
+    background: #fff5e8;
+    color: #c46a13;
+}
+
+.status-testing {
+    background: #f0f1ff;
+    color: #555ac7;
+}
+
+.status-design {
+    background: #eef5ff;
+    color: #3974c5;
+}
+
+.status-discussion {
+    background: #fff8e3;
+    color: #a77a16;
+}
+
+
+/* DISPATCH */
+
+.dispatch-delivered {
+    background: #edf8e9;
+    color: #3d8c26;
+}
+
+.dispatch-pending {
+    background: #fff8e3;
+    color: #a77a16;
+}
+
+.dispatch-ready {
+    background: #eef5ff;
+    color: #3974c5;
+}
+
+.dispatch-na {
+    background: #f1f2f4;
+    color: #747c87;
+}
+
+
+/* =========================================================
+   ACTION BUTTONS
+   ========================================================= */
+
+.action-buttons {
+    display: flex;
+    align-items: center;
+
+    gap: 6px;
+}
+
+.action-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 32px;
+    height: 32px;
+
+    padding: 0;
+
+    border: 1px solid transparent;
+    border-radius: 7px;
+
+    cursor: pointer;
+
+    transition:
+        background 0.15s ease,
+        border-color 0.15s ease,
+        color 0.15s ease;
+}
+
+.action-btn svg {
+    width: 17px;
+    height: 17px;
+}
+
+
+/* VIEW */
+
+.view-btn {
+    background: #f1f6ff;
+    color: #3974c5;
+}
+
+.view-btn:hover {
+    background: #e4efff;
+    color: #2d65b2;
+}
+
+
+/* EDIT */
+
+.edit-btn {
+    background: #fff5e8;
+    color: #c46a13;
+}
+
+.edit-btn:hover {
+    background: #ffead0;
+    color: #ae5d0e;
+}
+
+
+/* DELETE */
+
+.delete-btn {
+    background: #fff1f1;
+    color: #d34a4a;
+}
+
+.delete-btn:hover {
+    background: #ffe2e2;
+    color: #bd3737;
+}
+
+
+/* =========================================================
    EMPTY PROJECTS
-   ===================================================== */
+   ========================================================= */
 
 .empty-projects {
-    padding: 50px !important;
+    padding: 50px 20px !important;
+
+    color: #8a93a1 !important;
+
+    font-size: 13px !important;
 
     text-align: center;
-
-    color: #7b8494;
-
-    font-size: 14px;
 }
 
 
-/* =====================================================
-   RESPONSIVE
-   ===================================================== */
+/* =========================================================
+   MODAL OVERLAY
+   ========================================================= */
+
+.modal-overlay {
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 9999;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 20px;
+
+    box-sizing: border-box;
+
+    background: rgba(
+        17,
+        24,
+        39,
+        0.48
+    );
+
+    backdrop-filter: blur(4px);
+
+    animation: fadeIn 0.18s ease;
+}
+
+
+/* =========================================================
+   MODAL
+   ========================================================= */
+
+.project-modal {
+    width: 650px;
+    max-width: 100%;
+    max-height: calc(100vh - 40px);
+
+    overflow-y: auto;
+
+    padding: 26px;
+
+    box-sizing: border-box;
+
+    background: #ffffff;
+
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+
+    box-shadow:
+        0 18px 50px rgba(
+            15,
+            23,
+            42,
+            0.18
+        );
+
+    animation: modalUp 0.2s ease;
+}
+
+
+/* MODAL TITLE */
+
+.project-modal h2 {
+    margin: 0 0 22px;
+
+    color: #202938;
+
+    font-size: 21px;
+    line-height: 1.3;
+    font-weight: 700;
+
+    letter-spacing: -0.2px;
+}
+
+
+/* =========================================================
+   FORM
+   ========================================================= */
+
+.form-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+    gap: 14px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    margin-bottom: 7px;
+
+    color: #4b5563;
+
+    font-size: 12px;
+    font-weight: 650;
+}
+
+
+/* INPUT / SELECT */
+
+.project-modal input,
+.project-modal select {
+    width: 100%;
+
+    min-height: 42px;
+
+    padding: 0 12px;
+
+    box-sizing: border-box;
+
+    border: 1px solid #dfe3e8;
+    border-radius: 7px;
+
+    outline: none;
+
+    background: #ffffff;
+
+    color: #293241;
+
+    font-family: inherit;
+
+    font-size: 13px;
+
+    transition:
+        border-color 0.15s ease,
+        box-shadow 0.15s ease,
+        background 0.15s ease;
+}
+
+.project-modal input::placeholder {
+    color: #a0a7b2;
+}
+
+.project-modal input:hover,
+.project-modal select:hover {
+    border-color: #cbd1d8;
+}
+
+.project-modal input:focus,
+.project-modal select:focus {
+    border-color: #55b532;
+
+    background: #ffffff;
+
+    box-shadow:
+        0 0 0 3px rgba(
+            85,
+            181,
+            50,
+            0.10
+        );
+}
+
+
+/* =========================================================
+   MODAL ACTIONS
+   ========================================================= */
+
+.modal-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+
+    gap: 9px;
+
+    margin-top: 24px;
+
+    padding-top: 18px;
+
+    border-top: 1px solid #eef0f2;
+}
+
+
+/* CANCEL */
+
+.cancel-btn {
+    min-height: 40px;
+
+    padding: 0 17px;
+
+    border: 1px solid #dfe3e8;
+    border-radius: 7px;
+
+    background: #ffffff;
+    color: #596270;
+
+    font-family: inherit;
+
+    font-size: 13px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition:
+        background 0.15s ease,
+        border-color 0.15s ease;
+}
+
+.cancel-btn:hover {
+    background: #f7f8fa;
+
+    border-color: #cfd4da;
+}
+
+
+/* SAVE */
+
+.save-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    min-height: 40px;
+
+    padding: 0 18px;
+
+    border: 1px solid #55b532;
+    border-radius: 7px;
+
+    background: #55b532;
+    color: #ffffff;
+
+    font-family: inherit;
+
+    font-size: 13px;
+    font-weight: 650;
+
+    cursor: pointer;
+
+    transition:
+        background 0.15s ease,
+        border-color 0.15s ease;
+}
+
+.save-btn:hover:not(:disabled) {
+    background: #469d29;
+    border-color: #469d29;
+}
+
+.save-btn:disabled {
+    opacity: 0.65;
+
+    cursor: not-allowed;
+}
+
+
+/* =========================================================
+   DELETE MODAL
+   ========================================================= */
+
+.delete-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 46px;
+    height: 46px;
+
+    margin-bottom: 14px;
+
+    border-radius: 9px;
+
+    background: #fff1f1;
+
+    font-size: 21px;
+}
+
+.project-modal > p {
+    margin: 0;
+
+    color: #737d8b;
+
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+
+/* =========================================================
+   BUTTON SPINNER
+   ========================================================= */
+
+.button-spinner {
+    width: 14px;
+    height: 14px;
+
+    margin-right: 7px;
+
+    border: 2px solid rgba(
+        255,
+        255,
+        255,
+        0.35
+    );
+
+    border-top-color: #ffffff;
+
+    border-radius: 50%;
+
+    animation:
+        buttonSpin 0.7s linear infinite;
+}
+
+
+/* =========================================================
+   ANIMATIONS
+   ========================================================= */
+
+@keyframes fadeIn {
+
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+
+}
+
+
+@keyframes modalUp {
+
+    from {
+        opacity: 0;
+
+        transform:
+            translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+
+        transform:
+            translateY(0);
+    }
+
+}
+
+
+@keyframes buttonSpin {
+
+    to {
+        transform:
+            rotate(360deg);
+    }
+
+}
+
+
+/* =========================================================
+   TABLET
+   ========================================================= */
+
+@media (max-width: 1000px) {
+
+    .projects-page {
+        padding: 22px 20px 28px;
+    }
+
+    .projects-table-card {
+        overflow-x: auto;
+    }
+
+    .projects-table {
+        min-width: 760px;
+    }
+
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
 
 @media (max-width: 768px) {
 
-    .customer-project-grid {
-        grid-template-columns: 1fr;
+    .projects-page {
+        padding: 18px 14px 24px;
     }
 
+
+    .projects-header {
+        align-items: flex-start;
+
+        flex-direction: column;
+
+        gap: 14px;
+
+        margin-bottom: 18px;
+    }
+
+
+    .projects-header h1 {
+        font-size: 24px;
+    }
+
+
+    .projects-header p {
+        font-size: 13px;
+    }
+
+
+    .add-project-btn {
+        width: 100%;
+    }
+
+
+    .customer-project-grid {
+        grid-template-columns: 1fr;
+
+        gap: 10px;
+    }
+
+
     .customer-project-card {
-        padding: 18px;
+        min-height: 76px;
+
+        padding: 14px;
+    }
+
+
+    .customer-card-icon {
+        width: 40px;
+        height: 40px;
+
+        min-width: 40px;
+    }
+
+
+    .project-modal {
+        padding: 20px;
+
+        border-radius: 10px;
+    }
+
+
+    .form-grid {
+        grid-template-columns: 1fr;
+
+        gap: 12px;
+    }
+
+
+    .modal-actions {
+        flex-direction: column-reverse;
+
+        align-items: stretch;
+    }
+
+
+    .cancel-btn,
+    .save-btn {
+        width: 100%;
     }
 
 }
+
