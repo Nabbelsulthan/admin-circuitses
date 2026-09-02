@@ -304,7 +304,12 @@ export default function ProjectDetails() {
             });
 
         fetch(
-            `${API_URL}/api/documents/${id}`
+            `${API_URL}/api/documents/${id}`,
+            {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem("adminToken")}`,
+                },
+            }
         )
             .then((res) => res.json())
             .then((data) => {
@@ -418,13 +423,21 @@ export default function ProjectDetails() {
                     `${API_URL}/api/documents`,
                     {
                         method: "POST",
+                        headers: {
+                            Authorization: `Bearer ${localStorage.getItem("adminToken")}`,
+                        },
                         body: formData,
                     }
                 );
 
                 const response =
                     await fetch(
-                        `${API_URL}/api/documents/${id}`
+                        `${API_URL}/api/documents/${id}`,
+                        {
+                            headers: {
+                                Authorization: `Bearer ${localStorage.getItem("adminToken")}`,
+                            },
+                        }
                     );
 
                 const docs =
@@ -469,12 +482,20 @@ export default function ProjectDetails() {
                     `${API_URL}/api/documents/${documentId}`,
                     {
                         method: "DELETE",
+                        headers: {
+                            Authorization: `Bearer ${localStorage.getItem("adminToken")}`,
+                        },
                     }
                 );
 
                 const response =
                     await fetch(
-                        `${API_URL}/api/documents/${id}`
+                        `${API_URL}/api/documents/${id}`,
+                        {
+                            headers: {
+                                Authorization: `Bearer ${localStorage.getItem("adminToken")}`,
+                            },
+                        }
                     );
 
                 const docs =

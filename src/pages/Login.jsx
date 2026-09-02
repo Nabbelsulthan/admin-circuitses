@@ -72,6 +72,11 @@ export default function Login() {
             true
           );
 
+          localStorage.setItem(
+            "adminToken",
+            data.token
+          );
+
           navigate(
             "/dashboard"
           );
