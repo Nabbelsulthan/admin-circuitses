@@ -22,6 +22,7 @@ import HR from "./pages/HR/HR";
 import Departments from "./pages/HR/Departments";
 import Employees from "./pages/HR/Employees";
 import Attendance from "./pages/HR/Attendance";
+import Procurement from "./pages/Procurement/Procurement";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -99,6 +100,11 @@ function App() {
           <Route
             path="/hr/attendance"
             element={<Attendance />}
+          />
+
+          <Route
+            path="/procurement"
+            element={<Procurement />}
           />
 
 

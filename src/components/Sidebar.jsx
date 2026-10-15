@@ -9,6 +9,9 @@ import BadgeIcon from "@mui/icons-material/Badge";
 // import NotificationsIcon from "@mui/icons-material/Notifications";
 
 
+import Inventory2Icon from "@mui/icons-material/Inventory2";
+
+
 export default function Sidebar() {
   const navigate = useNavigate();
 
@@ -51,6 +54,15 @@ export default function Sidebar() {
         >
           <BadgeIcon />
           <span>HR</span>
+        </div>
+
+
+        <div
+          className="menu-item"
+          onClick={() => navigate("/procurement")}
+        >
+          <Inventory2Icon />
+          <span>Procurement</span>
         </div>
 
         {/* <div
