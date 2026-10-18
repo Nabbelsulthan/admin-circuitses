@@ -7,7 +7,7 @@ import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import VisibilityOffOutlinedIcon from "@mui/icons-material/VisibilityOffOutlined";
-import logo from "../assets/logo1.png";
+import logo from "../assets/admin-logo.png";
 import { toast } from "react-toastify";
 import { API_URL } from "../config";
 
@@ -18,6 +18,7 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
 
   const isLoggedIn =
@@ -34,72 +35,117 @@ export default function Login() {
 
 
 
-  const handleLogin =
-    async (e) => {
+  // const handleLogin =
+  //   async (e) => {
 
-      e.preventDefault();
+  //     e.preventDefault();
 
-      try {
+  //     try {
 
-        const response =
-          await fetch(
-            `${API_URL}/api/auth/login`,
-            {
-              method: "POST",
+  //       const response =
+  //         await fetch(
+  //           `${API_URL}/api/auth/login`,
+  //           {
+  //             method: "POST",
 
-              headers: {
-                "Content-Type":
-                  "application/json",
-              },
+  //             headers: {
+  //               "Content-Type":
+  //                 "application/json",
+  //             },
 
-              body:
-                JSON.stringify({
-                  username: email,
-                  password,
-                }),
-            }
-          );
+  //             body:
+  //               JSON.stringify({
+  //                 username: email,
+  //                 password,
+  //               }),
+  //           }
+  //         );
 
-        const data =
-          await response.json();
+  //       const data =
+  //         await response.json();
 
-        if (
-          response.ok
-        ) {
+  //       if (
+  //         response.ok
+  //       ) {
 
-          localStorage.setItem(
-            "isLoggedIn",
-            true
-          );
+  //         localStorage.setItem(
+  //           "isLoggedIn",
+  //           true
+  //         );
 
-          localStorage.setItem(
-            "adminToken",
-            data.token
-          );
+  //         localStorage.setItem(
+  //           "adminToken",
+  //           data.token
+  //         );
 
-          navigate(
-            "/dashboard"
-          );
+  //         navigate(
+  //           "/dashboard"
+  //         );
 
-        } else {
+  //       } else {
 
-          toast.error(
-            data.message || "Invalid username or password"
-          );
+  //         toast.error(
+  //           data.message || "Invalid username or password"
+  //         );
 
-          // alert(
-          //   data.message
-          // );
+  //         // alert(
+  //         //   data.message
+  //         // );
 
+  //       }
+
+  //     } catch (error) {
+
+  //       console.error(error);
+
+  //     }
+
+  //   };
+
+
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+
+    // Prevent duplicate login requests
+    if (isLoading) return;
+
+    setIsLoading(true);
+
+    try {
+      const response = await fetch(
+        `${API_URL}/api/auth/login`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            username: email,
+            password,
+          }),
         }
+      );
 
-      } catch (error) {
+      const data = await response.json();
 
-        console.error(error);
+      if (response.ok) {
+        localStorage.setItem("isLoggedIn", true);
+        localStorage.setItem("adminToken", data.token);
 
+        navigate("/dashboard");
+      } else {
+        toast.error(
+          data.message || "Invalid username or password"
+        );
       }
-
-    };
+    } catch (error) {
+      console.error(error);
+      toast.error("Unable to connect. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <div className="login-page">
@@ -193,13 +239,30 @@ export default function Login() {
               {error}
             </div>
           )}
-
+          {/* 
           <button
             type="submit"
             className="login-btn"
           >
             Login to CES Admin
+          </button> */}
+
+
+          <button
+            type="submit"
+            className={`login-btn ${isLoading ? "loading" : ""}`}
+            disabled={isLoading}
+          >
+            {isLoading ? (
+              <>
+                <span className="login-spinner"></span>
+                Logging in...
+              </>
+            ) : (
+              "Login to CES Admin"
+            )}
           </button>
+
 
           <div className="footer-text">
             Circuits Energy System Pvt Ltd.

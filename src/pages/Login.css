@@ -336,3 +336,48 @@
         font-size: 52px;
     }
 }
+
+
+
+
+/* Login loading state */
+.login-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+}
+
+.login-btn.loading {
+    background: #449327;
+    cursor: not-allowed;
+    opacity: 1;
+}
+
+
+
+.login-btn:disabled {
+    pointer-events: none;
+}
+
+.login-spinner {
+    width: 21px;
+    height: 21px;
+    border: 3px solid rgba(255, 255, 255, 0.35);
+    border-top-color: #ffffff;
+    border-radius: 50%;
+    animation: login-spin 0.7s linear infinite;
+    flex-shrink: 0;
+}
+
+@keyframes login-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .login-spinner {
+        animation-duration: 1.5s;
+    }
+}
