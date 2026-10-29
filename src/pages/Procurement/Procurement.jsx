@@ -1294,12 +1294,54 @@ export default function Procurement() {
     );
 
   // Print-only procurement document: grouped first by vendor, then by make.
+  // const printableGroups = useMemo(() => {
+  //   const groups = new Map();
+
+  //   projectMaterials.forEach((item) => {
+  //     const vendorName = (item.vendor_name || "Vendor Not Assigned").trim();
+  //     const makeName = (item.make_name || "Make Not Assigned").trim();
+  //     const key = `${vendorName.toLowerCase()}|||${makeName.toLowerCase()}`;
+
+  //     if (!groups.has(key)) {
+  //       groups.set(key, {
+  //         vendorName,
+  //         makeName,
+  //         items: [],
+  //       });
+  //     }
+
+  //     groups.get(key).items.push(item);
+  //   });
+
+  //   return Array.from(groups.values())
+  //     .map((group) => ({
+  //       ...group,
+  //       items: [...group.items].sort((a, b) =>
+  //         String(a.material_name || "").localeCompare(String(b.material_name || ""))
+  //       ),
+  //     }))
+  //     .sort((a, b) => {
+  //       const vendorComparison = a.vendorName.localeCompare(b.vendorName);
+  //       return vendorComparison || a.makeName.localeCompare(b.makeName);
+  //     });
+  // }, [projectMaterials]);
+
+
+
+  // Print-only procurement document: preserve insertion order
+  // within each vendor and make group.
   const printableGroups = useMemo(() => {
     const groups = new Map();
 
     projectMaterials.forEach((item) => {
-      const vendorName = (item.vendor_name || "Vendor Not Assigned").trim();
-      const makeName = (item.make_name || "Make Not Assigned").trim();
+      const vendorName = (
+        item.vendor_name || "Vendor Not Assigned"
+      ).trim();
+
+      const makeName = (
+        item.make_name || "Make Not Assigned"
+      ).trim();
+
       const key = `${vendorName.toLowerCase()}|||${makeName.toLowerCase()}`;
 
       if (!groups.has(key)) {
@@ -1310,21 +1352,16 @@ export default function Procurement() {
         });
       }
 
+      // Push items in the exact order received from the BOM.
+      // Do not sort by material name.
       groups.get(key).items.push(item);
     });
 
-    return Array.from(groups.values())
-      .map((group) => ({
-        ...group,
-        items: [...group.items].sort((a, b) =>
-          String(a.material_name || "").localeCompare(String(b.material_name || ""))
-        ),
-      }))
-      .sort((a, b) => {
-        const vendorComparison = a.vendorName.localeCompare(b.vendorName);
-        return vendorComparison || a.makeName.localeCompare(b.makeName);
-      });
+    // Preserve the order in which each vendor/make group
+    // first appeared in the BOM.
+    return Array.from(groups.values());
   }, [projectMaterials]);
+
 
   function printProcurementList() {
     if (!selectedProject || projectMaterials.length === 0) {
