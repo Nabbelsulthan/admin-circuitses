@@ -2404,7 +2404,17 @@ export default function Procurement() {
                     <tr key={item.id || `${item.material_name}-${index}`}>
                       <td className="print-number">{index + 1}</td>
                       <td className="print-product">{item.material_name || "—"}</td>
-                      <td className="print-qty">{item.quantity ?? "—"}</td>
+                   
+
+
+                      <td className="print-qty">
+                        {item.quantity == null || item.quantity === ""
+                          ? "—"
+                          : Number(item.quantity).toLocaleString("en-IN", {
+                            maximumFractionDigits: 3,
+                          })}
+                      </td>
+
                       <td className="print-unit">{item.unit || "Nos"}</td>
                       <td className="print-price">₹{Number(item.unit_cost || 0).toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
                       <td className="print-empty">&nbsp;</td>
